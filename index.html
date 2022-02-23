@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="inner-container">
+        <div id="canvasWrapper">
+            <canvas id="overlay" width="100%" height="100%"></canvas>
+            <canvas id="canvas" width="100%" height="100%"></canvas>
+        </div>
+        <div class="interfaces">
+            <div class="rooms">
+                <!-- Rooms go here, generated in javascript -->
+            </div>
+            <div class="buttons">
+                <button onclick="reset()" class="delete-all">Reset</button>
+                <button onclick="exportToYaml()" class="delete-all">Export to YAML</button>
+            </div>
+        </div>
+    </div>
+    <!-- The Stock Div contains element that are cloned in javascript and inserted into the app -->
+    <div id="stock" hidden>
+        <div class="room" id="room0">
+            <div class="left">
+                <button id="delete">X</button>
+                <div class="center">
+                    <div class="label"></div>
+                    <div class="mesures">
+                        <div class="width"></div>
+                        <div class="height"></div>
+                    </div>
+                    <div class="positions">
+                        <div class="x"></div>
+                        <div class="y"></div>
+                    </div>
+                </div>
+                <button id="more" class="more-info"><span>></span></button>
+            </div>
+            <div class="right">
+                <div class="content">
+                    <div class="cont">
+                        <input type="text" id="room_name" placeholder="Room name" />
+                    </div>
+                    <button id="probe" title="Add an ESPresense device">+</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-window">
+            <div class="text">
+
+            </div>
+            <div class="buttons">
+                <button onclick="closeModal()" class="close">Cancel</button>
+                <button onclick="copyYaml()">Copy to Clipboard</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
