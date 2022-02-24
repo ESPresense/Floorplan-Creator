@@ -356,8 +356,8 @@ function handleScroll(e) {
     // console.log(e);
     // console.log("Scroll left", e.ClientX);
     // console.log("Scroll top", e.ClientY);
-    scrollOffsetX = e.deltaX;
-    scrollOffsetY = e.deltaY;
+    scrollOffsetX = -e.deltaX;
+    scrollOffsetY = -e.deltaY;
     updateRoomsPosition(scrollOffsetX, scrollOffsetY);
     render(null, false);
 }
