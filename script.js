@@ -4,6 +4,9 @@ var overlay = document.getElementById("overlay");
 var ctx = canvas.getContext("2d");
 var ctxo = overlay.getContext("2d");
 
+var scrollOffsetX = 0;
+var scrollOffsetY = 0;
+
 // get stock container to pick element to clone and inject
 var selfStorage = document.getElementById("stock");
 
@@ -197,8 +200,8 @@ function exportToYaml() {
     jsonStorage.rooms.forEach((room) => {
         // first coordinate is room x minus offsetX, room y minus offsetY
         // second coordinat is (room x minus offsetX) plus room width, (room y minus offsetY) plus room height
-        console.log(room.id, "x: " + (room.zone.x - offsetX) + ", y: " + (room.zone.y - offsetY));
-        console.log(room.id, "x: " + ((room.zone.x - offsetX) + room.zone.width) + ", y: " + ((room.zone.y - offsetY) + room.zone.height));
+        //console.log(room.id, "x: " + (room.zone.x - offsetX) + ", y: " + (room.zone.y - offsetY));
+        //console.log(room.id, "x: " + ((room.zone.x - offsetX) + room.zone.width) + ", y: " + ((room.zone.y - offsetY) + room.zone.height));
         var objRoom = {
             name: room.name,
             y1: Math.abs(room.zone.x - offsetX),
@@ -347,6 +350,29 @@ function handleMouseOut(e) {
 
     // the drag is over, clear the dragging flag
     isDown = false;
+}
+
+function handleScroll(e) {
+    // console.log(e);
+    // console.log("Scroll left", e.ClientX);
+    // console.log("Scroll top", e.ClientY);
+    scrollOffsetX = e.deltaX;
+    scrollOffsetY = e.deltaY;
+    updateRoomsPosition(scrollOffsetX, scrollOffsetY);
+    render(null, false);
+}
+
+function updateRoomsPosition(scrollOffsetX, scrollOffsetY) {
+    var data = getRooms();
+    data.rooms.forEach(function(room) {
+        room.zone.x = room.zone.x + scrollOffsetX;
+        room.zone.y = room.zone.y + scrollOffsetY;
+        room.text.width.x = room.text.width.x + scrollOffsetX;
+        room.text.width.y = room.text.width.y + scrollOffsetY;
+        room.text.height.x = room.text.height.x + scrollOffsetX;
+        room.text.height.y = room.text.height.y + scrollOffsetY;
+    })
+    setRooms(data);
 }
 
 const threshold = 50;
@@ -502,3 +528,11 @@ document.querySelector("#canvas").addEventListener("mouseup", function(e) {
 document.querySelector("#canvas").addEventListener("mouseout", function(e) {
     handleMouseOut(e);
 });
+
+// document.querySelector("#canvas").onscroll = function(e) {
+//     handleScroll(e);
+// }
+
+document.querySelector("#canvas").addEventListener("wheel", function(e) {
+    handleScroll(e);
+})
