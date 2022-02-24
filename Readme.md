@@ -7,13 +7,13 @@ This application is developped in HTML/JS/CSS, no libraries, Canvas power !
 This project is a work in progress.
 
 ## What is planned.  
-[ ] Better UI/UX.  
-[X] Scroll/Wheel on the canvas to move floorplan
-[ ] Zoom on the canvas.
-[ ] Pan on the canvas.  
-[ ] Ability to add esp32 in rooms and position them with precision.  
-[ ] Export esp32 position from rooms to ESPresenseIPS yaml format.  
-[ ] Have each esp32 bluetooth signal radius visible on plan to make sure you have at least 3 signals in each rooms. (will help determine where is the best place to put them ;)).  
+[  ] Better UI/UX.  
+[X] Scroll/Wheel on the canvas to move floorplan.   
+[  ] Zoom on the canvas.    
+[  ] Pan on the canvas.      
+[  ] Ability to add esp32 in rooms and position them with precision.  
+[  ] Export esp32 position from rooms to ESPresenseIPS yaml format.  
+[  ] Have each esp32 bluetooth signal radius visible on plan to make sure you have at least 3 signals in each rooms. (will help determine where is the best place to put them ;)).  
 
 ## A little glimps
 
