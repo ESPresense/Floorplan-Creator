@@ -1,12 +1,15 @@
 html {
     height: 100%;
     overflow: hidden;
+    font-family: helvetica, "Roboto", arial, sans-serif;
+    margin: 0;
 }
 
 body {
     height: 100%;
     background-color: ivory;
     margin: 0;
+    background: #373737;
 }
 
 .inner-container {
@@ -20,11 +23,13 @@ body {
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    background: #252525;
 }
 
 .rooms {
     flex: 1;
     width: 265px;
+    overflow: hidden;
 }
 
 .buttons {
@@ -36,8 +41,10 @@ body {
     font-size: 14px;
     padding: 15px 5px;
     border-radius: 0px !important;
-    border: solid 1px #868686;
+    border: solid 1px #252525;
     cursor: pointer;
+    background: #4b4b4b;
+    color: white;
 }
 
 canvas {
@@ -46,6 +53,7 @@ canvas {
     width: inherit;
     height: inherit;
     box-sizing: border-box;
+    border: none;
 }
 
 #canvasWrapper {
@@ -57,9 +65,11 @@ canvas {
 
 .room {
     display: flex;
-    border-bottom: solid 1px black;
+    border-bottom: solid 1px #252525;
+    background: #4b4b4b;
     transition: all 0.25s ease-in-out;
     width: 500px;
+    color: white;
 }
 
 .room button {
@@ -112,6 +122,8 @@ button.more-info.open>span {
 
 .cont {
     flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 input#room_name {
@@ -124,6 +136,7 @@ input#room_name {
 button#probe {
     margin-right: 0;
     width: 37px;
+    background: #18b249;
 }
 
 .mesures {
@@ -188,4 +201,109 @@ button#probe {
     background: white;
     border-radius: 3px;
     padding: 15px;
+}
+
+button#probe.active {
+    background: #335bd0;
+}
+
+.probe-list {
+    overflow-x: auto;
+    background: #4b4b4b;
+    flex: 1;
+}
+
+.probe-list>button {
+    width: 40px;
+    background: #18b249;
+    height: 100%;
+    margin-right: 0 !important;
+    border-right: solid 1px white;
+}
+
+.modal.yaml-export>.modal-window {
+    width: 500px;
+}
+
+.text>.container {
+    display: flex;
+}
+
+.text>.container>div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border-radius: 3px;
+}
+
+.text>.container>.left {
+    max-width: 250px;
+    margin-right: 20px;
+}
+
+.input-elem {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.input-elem>input {
+    height: 30px;
+    flex: 1;
+    border-radius: 0px;
+    border: solid 1px #656565;
+    padding-left: 10px;
+}
+
+.input-elem>label {
+    display: flex;
+    align-items: center;
+    border: solid 1px #b2b2b2;
+    border-right: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+button.delete-probe {
+    background: #d21818;
+    border: solid 1px #d21818;
+    border-radius: 3px;
+    font-size: 17px;
+    color: white;
+    padding: 8px 10px;
+}
+
+.danger-txt {
+    color: #d21818;
+}
+
+#delete {
+    background: #151515;
+}
+
+.code-area {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    height: 100%;
+    color: white;
+}
+
+.probe-modal .modal-window {
+    width: 640px;
+}
+
+.input-elem>span {
+    display: flex;
+    align-items: center;
+    border: solid 1px #b2b2b2;
+    border-left: none;
+    padding: 0px 10px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+button#more {
+    background: #535353;
 }

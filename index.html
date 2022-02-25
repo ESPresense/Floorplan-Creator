@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <title>Document</title>
 </head>
@@ -29,7 +30,7 @@
     <div id="stock" hidden>
         <div class="room" id="room0">
             <div class="left">
-                <button id="delete">X</button>
+                <button id="delete"><i class="fas fa-trash-alt danger-txt"></i></button>
                 <div class="center">
                     <div class="label"></div>
                     <div class="mesures">
@@ -41,28 +42,63 @@
                         <div class="y"></div>
                     </div>
                 </div>
-                <button id="more" class="more-info"><span>></span></button>
+                <button id="more" class="more-info" title="Change room name and add esp32 devices on floorplan"><span><i class="fas fa-chevron-right info-txt"></i></span></button>
             </div>
             <div class="right">
                 <div class="content">
                     <div class="cont">
                         <input type="text" id="room_name" placeholder="Room name" />
+                        <div class="probe-list">
+
+                        </div>
                     </div>
-                    <button id="probe" title="Add an ESPresense device">+</button>
+                    <button id="probe" class="add-probe-btn" title="Add an ESPresense device"><i class="fas fa-plus info-txt"></i></button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal">
+    <div class="modal yaml-export">
         <div class="modal-backdrop"></div>
         <div class="modal-window">
             <div class="text">
 
             </div>
             <div class="buttons">
-                <button onclick="closeModal()" class="close">Cancel</button>
+                <button onclick="closeModal('.yaml-export')" class="close">Cancel</button>
                 <button onclick="copyYaml()">Copy to Clipboard</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal probe-modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-window">
+            <div class="text">
+                <div class="container">
+                    <div class="left">
+                        <div class="input-elem">
+                            <label>x:</label> <input disabled class="probe-x" type="number"><span>cm</span>
+                        </div>
+                        <div class="input-elem">
+                            <label>y:</label> <input disabled class="probe-y" type="number"><span>cm</span>
+                        </div>
+                        <div class="input-elem">
+                            <label>z:</label> <input class="probe-z" type="number"><span>cm</span>
+                        </div>
+
+                        <button class="delete-probe" onclick="deleteProbe()">Delete</button>
+                    </div>
+                    <div class="right">
+                        <div class="code-area">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons">
+                <button onclick="closeModal('.probe-modal')" class="close">Cancel</button>
+                <button onclick="saveProbe()">Save</button>
             </div>
         </div>
     </div>

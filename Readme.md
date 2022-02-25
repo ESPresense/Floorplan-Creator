@@ -6,14 +6,27 @@ This application is developped in HTML/JS/CSS, no libraries, Canvas power !
 
 This project is a work in progress.
 
+## Changes
+26-02-2022
+- Dark Theme
+- Fix yaml floorplan coordinates (was in cm needs m)
+- Icons and small UI tweaks
+- Add ESP32 to Rooms
+- Edit ESP32 Z value and see its yaml code
+- yaml export now exports esp32 position as well
+
+24-02-2022
+- Scroll/Mouse Wheel to move floorplan in canvas
+
 ## What is planned.  
-[  ] Better UI/UX.  
+[X] Better UI/UX.  
 [X] Scroll/Wheel on the canvas to move floorplan.   
 [  ] Zoom on the canvas.    
 [  ] Pan on the canvas.      
-[  ] Ability to add esp32 in rooms and position them with precision.  
-[  ] Export esp32 position from rooms to ESPresenseIPS yaml format.  
+[X] Ability to add esp32 in rooms and position them with precision.  
+[X] Export esp32 position from rooms to ESPresenseIPS yaml format.  
 [  ] Have each esp32 bluetooth signal radius visible on plan to make sure you have at least 3 signals in each rooms. (will help determine where is the best place to put them ;)).  
+[  ] Code refactoring, add comments.
 
 ## A little glimps
 
