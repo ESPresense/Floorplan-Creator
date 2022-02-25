@@ -2,7 +2,7 @@
 
 This project has been created to make it easier to create floorplan for ESPresenseIPS by having a gui.
 It offers snap to rooms for easy alignement, gives you mesures on each side of your cursor when on a wall.
-This application is developped in HTML/JS/CSS, no libraries, Canvas power !
+This application is developped in HTML/JS/CSS, no libraries (but fontawesome on a cdn), Canvas power !
 
 This project is a work in progress.
 
