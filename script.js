@@ -20,6 +20,8 @@ var mqttInitData = {
     password: ""
 }
 
+var convertedYAMLJSON;
+
 var devices = [];
 var showDevices = false;
 
@@ -350,8 +352,8 @@ function exportToYaml() {
         console.log(exportedValue);
     } else {
         // THIS MODAL IS FOR DEV, CONVERTS YAML BACK TO JSON without some elements
-        //var modal = document.querySelector(".yaml-to-json-modal");
-        //modal.classList.add("visible");
+        var modal = document.querySelector(".yaml-to-json-modal");
+        modal.classList.add("visible");
     }
 }
 
@@ -1268,7 +1270,13 @@ document.querySelector(".yaml-data").addEventListener("keyup", event => {
             }
         }
     });
+    convertedYAMLJSON = storageDataConvert;
+    document.querySelector(".json-data").value = JSON.stringify(convertedYAMLJSON);
     console.log(storageDataConvert);
     // Will overight localstorage rooms with result of conversion of uncommenting
-    //window.localStorage.setItem("rooms", JSON.stringify(storageDataConvert));
 });
+
+function saveConvertedData() {
+    window.localStorage.setItem("rooms", JSON.stringify(convertedYAMLJSON));
+    window.location.reload();
+}
