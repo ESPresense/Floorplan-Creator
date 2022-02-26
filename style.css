@@ -193,6 +193,8 @@ button#probe {
     background: #dadada;
     z-index: 9;
     border-radius: 3px;
+    display: flex;
+    flex-direction: column;
 }
 
 .modal-window .text {
@@ -201,6 +203,7 @@ button#probe {
     background: white;
     border-radius: 3px;
     padding: 15px;
+    overflow: auto;
 }
 
 button#probe.active {
@@ -223,6 +226,7 @@ button#probe.active {
 
 .modal.yaml-export>.modal-window {
     width: 500px;
+    max-height: 90%;
 }
 
 .text>.container {
