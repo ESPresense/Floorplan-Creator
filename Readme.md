@@ -35,7 +35,7 @@ This project is a work in progress.
 - Scroll/Mouse Wheel to move floorplan in canvas
 
 ## What is planned.  
-[✓] Better UI/UX.  
+[  ] Better UI/UX.  
 [✓] Scroll/Wheel on the canvas to move floorplan.   
 [  ] Zoom on the canvas.    
 [  ] Pan on the canvas.      
