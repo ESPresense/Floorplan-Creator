@@ -46,3 +46,11 @@ This project is a work in progress.
 <img width="1920" alt="Screenshot 2022-02-26 at 00 02 40" src="https://user-images.githubusercontent.com/3304418/155815206-9bebe308-3fd3-4868-9984-bd1ce0aabe06.png">
 
 <img width="1920" alt="Screenshot 2022-02-26 at 00 02 57" src="https://user-images.githubusercontent.com/3304418/155815210-9b43120a-ac5a-45a5-9bdc-06835045ba35.png">
+
+<img width="1920" alt="Screenshot 2022-02-26 at 00 58 53" src="https://user-images.githubusercontent.com/3304418/155819156-1cbcd5cd-0398-4d0b-9bf2-86c5503221d3.png">
+
+<img width="1920" alt="Screenshot 2022-02-26 at 00 59 07" src="https://user-images.githubusercontent.com/3304418/155819162-809ad234-b525-481e-b9cf-479d37a42360.png">
+
+<img width="1920" alt="Screenshot 2022-02-26 at 00 59 29" src="https://user-images.githubusercontent.com/3304418/155819171-a63a55f4-196e-4850-898f-15ab5a6188b5.png">
+
+
