@@ -21,6 +21,7 @@ This project is a work in progress.
 - Coverage distance is ajustable
 - Circle color is adjustable
 - Coverage circle can be visible when placing device to help positioning it right
+- Now you can even make art with the app.
 
 25-02-2022
 - Dark Theme
