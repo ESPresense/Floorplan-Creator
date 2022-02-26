@@ -16,6 +16,11 @@ This project is a work in progress.
 
 ## Changes
 26-02-2022
+- MQTT Client to track devices
+- MQTT settings page to input config
+- show devices on the floorplan realtime
+
+26-02-2022
 - Show ESP32 device coverage button
 - ESP32 coverage shown as a circle around the device
 - Coverage distance is ajustable

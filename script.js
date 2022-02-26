@@ -12,6 +12,19 @@ var probeRoom = -1;
 var probePositionX = 0;
 var probePositionY = 0;
 
+var mqttInitData = {
+    host: "",
+    port: 1884,
+    topic: "espresense/ips",
+    username: "",
+    password: ""
+}
+
+var devices = [];
+var showDevices = false;
+
+var mqttDevicesLatestMessage = {};
+
 var firstCoordinateOffsetX = 0;
 var firstCoordinateOffsetY = 0;
 
@@ -119,6 +132,23 @@ function render(hightlightId = null, renderButtons = true) {
                         ctxo.closePath();
                     }
                 });
+
+                if (showDevices) {
+                    var mqttKeys = Object.keys(mqttDevicesLatestMessage);
+                    //console.log("rendring", mqttDevicesLatestMessage);
+                    mqttKeys.forEach(key => {
+                        var device = mqttDevicesLatestMessage[key];
+                        //console.log(device);
+                        ctxo.beginPath();
+                        ctxo.fillStyle = "#ffffff80";
+                        ctxo.arc(device.x + firstCoordinateOffsetX, device.y + firstCoordinateOffsetY, 20, 0, 2 * Math.PI);
+                        ctxo.fill();
+                        ctxo.closePath();
+
+                        ctxo.fillStyle = '#ffffff';
+                        ctxo.fillText(device.name, (device.x + firstCoordinateOffsetX), (device.y + firstCoordinateOffsetY) + 35);
+                    })
+                }
 
                 // if buttons have to be re-rendered, reset them based on localstorage
                 if (renderButtons) {
@@ -318,6 +348,10 @@ function exportToYaml() {
         modal.querySelector(".text").innerHTML = exportedValue.replaceAll("\n", "<br />").replaceAll("\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
         modal.classList.add("visible");
         console.log(exportedValue);
+    } else {
+        // THIS MODAL IS FOR DEV, CONVERTS YAML BACK TO JSON without some elements
+        //var modal = document.querySelector(".yaml-to-json-modal");
+        //modal.classList.add("visible");
     }
 }
 
@@ -600,8 +634,35 @@ function handleScroll(e) {
     // console.log("Scroll top", e.ClientY);
     scrollOffsetX = -e.deltaX;
     scrollOffsetY = -e.deltaY;
+    var jsonStorage = getRooms();
+    if (jsonStorage.rooms.length) {
+        var mostLeftRoom = jsonStorage.rooms.reduce(function(prev, curr) {
+            return prev.zone.x <= curr.zone.x ? prev : curr;
+        });
+
+        // get highest y value
+        var mostTopRoom = jsonStorage.rooms.reduce(function(prev, curr) {
+            return prev.zone.y <= curr.zone.y ? prev : curr;
+        });
+
+        // create an offseter
+        firstCoordinateOffsetY = mostLeftRoom.zone.y;
+        firstCoordinateOffsetX = mostTopRoom.zone.x;
+    }
+
     updateRoomsPosition(scrollOffsetX, scrollOffsetY);
+    //updateDevicesPosition(scrollOffsetX, scrollOffsetY);
     render(null, false);
+}
+
+function updateDevicesPosition(scrollOffsetX, scrollOffsetY) {
+    var mqttKeys = Object.keys(mqttDevicesLatestMessage);
+    //console.log("rendring", mqttDevicesLatestMessage);
+    mqttKeys.forEach(key => {
+        var device = mqttDevicesLatestMessage[key];
+        device.x = device.x + scrollOffsetX;
+        device.y = device.y + scrollOffsetY;
+    });
 }
 
 function updateRoomsPosition(scrollOffsetX, scrollOffsetY) {
@@ -925,3 +986,248 @@ document.querySelector("#canvas").addEventListener("mouseout", function(e) {
 document.querySelector("#canvas").addEventListener("wheel", function(e) {
     handleScroll(e);
 })
+
+
+var mqtt;
+var reconnectTimeout = 1200;
+
+function onConnect() {
+    console.log("connected to socket mqtt");
+    mqtt.subscribe(mqttInitData.topic + "/#");
+    document.querySelector(".toggleDevices").disabled = false;
+    toggleDevices();
+}
+
+function onFailure(msg) {
+    console.log("failure to connect to mqtt");
+    document.querySelector(".toggleDevices").disabled = true;
+    setTimeout(MQTTconnect, reconnectTimeout);
+}
+
+function onMessageArrived(msg) {
+    var objectMsg = JSON.parse(msg.payloadString);
+    objectMsg.x = (objectMsg.x * 100);
+    objectMsg.y = (objectMsg.y * 100);
+    mqttDevicesLatestMessage[objectMsg.name] = objectMsg;
+    upsertDevice(objectMsg);
+    render(null, false);
+}
+
+function upsertDevice(objectMsg) {
+    var devicesString = window.localStorage.getItem("devices");
+    
+    var localDevices = []
+    if (devicesString) {
+        localDevices = JSON.parse(devicesString);
+    }
+    var device = localDevices[objectMsg.name];
+    if (device) {
+        device.data = objectMsg;
+    } else {
+        localDevices[objectMsg.name] = {
+            data: objectMsg,
+            color: "#ffffff80"
+        }
+    }
+    window.localStorage.setItem("devices", JSON.stringify(localDevices));
+}
+
+function MQTTconnect() {
+    if (mqtt) {
+        mqtt.disconnect();
+    }
+    console.log("connecting to " + mqttInitData.host + " on port " + mqttInitData.port);
+    mqtt = new Paho.MQTT.Client(mqttInitData.host, mqttInitData.port, "clientjs");
+    var options = {
+        timeout: 3,
+        onSuccess: onConnect,
+        userName: mqttInitData.username,
+        password: mqttInitData.password,
+        onFailure: onFailure,
+
+    };
+    mqtt.onMessageArrived = onMessageArrived;
+    mqtt.connect(options);
+}
+
+var jsonStorage = getRooms();
+if (jsonStorage.rooms.length) {
+    var mostLeftRoom = jsonStorage.rooms.reduce(function(prev, curr) {
+        return prev.zone.x <= curr.zone.x ? prev : curr;
+    });
+
+    // get highest y value
+    var mostTopRoom = jsonStorage.rooms.reduce(function(prev, curr) {
+        return prev.zone.y <= curr.zone.y ? prev : curr;
+    });
+
+    // create an offseter
+    firstCoordinateOffsetY = mostLeftRoom.zone.y;
+    firstCoordinateOffsetX = mostTopRoom.zone.x;
+}
+
+window.onload = function() {
+    mqttInitData = getMqttSettings();
+    if (mqttInitData.host && mqttInitData.username && mqttInitData.password && mqttInitData.port && mqttInitData.topic) {
+        MQTTconnect();
+    } else {
+        document.querySelector(".toggleDevices").disabled = true;
+    }
+}
+
+function connectMQTT() {
+    mqttInitData.host = document.querySelector(".mqtt-settings .host").value;
+    mqttInitData.port = parseInt(document.querySelector(".mqtt-settings .port").value);
+    mqttInitData.topic = document.querySelector(".mqtt-settings .topic").value;
+    mqttInitData.username = document.querySelector(".mqtt-settings .username").value;
+    mqttInitData.password = document.querySelector(".mqtt-settings .password").value;
+
+    console.log("password", mqttInitData.password);
+
+    if (mqttInitData.host && mqttInitData.username && mqttInitData.password && mqttInitData.port && mqttInitData.topic) {
+        MQTTconnect();
+    }
+}
+
+function getMqttSettings() {
+    var stringSettings = window.localStorage.getItem("mqttSettings");
+    if (!stringSettings) {
+        return mqttInitData;
+    }
+
+    var settings = JSON.parse(stringSettings);
+    return settings;
+}
+
+function devicesSettings() {
+    mqttInitData = getMqttSettings();
+
+    var modal = document.querySelector(".mqtt-settings");
+    modal.querySelector(".host").value = mqttInitData.host;
+    modal.querySelector(".port").value = mqttInitData.port;
+    modal.querySelector(".topic").value = mqttInitData.topic;
+    modal.querySelector(".username").value = mqttInitData.username;
+    modal.querySelector(".password").value = mqttInitData.password;
+    //modal.querySelector(".coverage-color").value = probe.color.slice(0, -2);
+
+    modal.classList.add("visible");
+}
+
+function saveMqtt() {
+    window.localStorage.setItem("mqttSettings", JSON.stringify(mqttInitData));
+}
+
+function toggleDevices() {
+    if (showDevices) {
+        showDevices = false;
+        document.querySelector(".toggleDevices").classList.remove("active");
+    } else {
+        showDevices = true;
+        document.querySelector(".toggleDevices").classList.add("active");
+    }
+    render(null, false);
+}
+
+document.querySelector(".yaml-data").addEventListener("keyup", event => {
+    // Messed up and lost my localstorage, had to convert yaml back to json object and redraw.
+    // it kinda junky, it works for yaml with only - rooms: and - floorplans: and bases itself on strict rules... like spaces and \n.
+    // might not work for everyone from scratch.
+    // This feature is disabled by default.
+    var value = event.target.value;
+    var regexMatch = /rooms:([\s\S]*?)(](?=[^\]]*$))/g.exec(value);
+    var roomsString = regexMatch[0];
+    var floorplanString = value.replace(roomsString, "");
+    //var floorplanRooms = /(-([\s\S]*?)((?:[^\n]+\n){5}))/g.exec(floorplanString);
+    var floorplanRooms = floorplanString.match(/(-([\s\S]*?)((?:[^\n]+\n){5}))/g);
+    var idx = floorplanString.lastIndexOf('-')
+    var lastRoom = floorplanString.substring(idx + 1).trim()
+    floorplanRooms.push("- "+lastRoom);
+
+    var storageDataConvert = {
+        rooms: []
+    }
+
+    console.log(floorplanRooms);
+    floorplanRooms.forEach((room, roomIndex) => {
+        var data = room.split("\n");
+        var roomName = "";
+        var roomId = -1;
+        data.forEach((attr , index)=> {
+            if(attr.includes("- name:")) {
+                roomName = attr.replace("- name:", "").trim();
+                roomId = roomIndex+1;
+                roomX = 0;
+                roomY = 0;
+                storageDataConvert.rooms.push({
+                    name: roomName,
+                    id: roomId,
+                    zone: {},
+                    text: {
+                        width: {},
+                        height: {}
+                    },
+                    probes: []
+                });
+            } else if (attr.includes("y1:")) {
+                var tmproom = storageDataConvert.rooms.find(x => x.id == roomId);
+                if (tmproom) {
+                    if (!tmproom.zone) {
+                        tmproom.zone = {};
+                    }
+                    tmproom.zone.y = parseFloat(attr.replace("y1:", "").trim())*100;
+                }
+            } else if (attr.includes("x1:")) {
+                var tmproom = storageDataConvert.rooms.find(x => x.id == roomId);
+                if (tmproom) {
+                    if (!tmproom.zone) {
+                        tmproom.zone = {};
+                    }
+                    tmproom.zone.x = parseFloat(attr.replace("x1:", "").trim())*100;
+                }
+            } else if (attr.includes("y2:")) {
+                var tmproom = storageDataConvert.rooms.find(x => x.id == roomId);
+                var yValue = data.find(x => x.includes("y1:"))
+                if (tmproom) {
+                    if (!tmproom.zone) {
+                        tmproom.zone = {};
+                    }
+                    tmproom.zone.height = (parseFloat(attr.replace("y2:", "").trim()) - parseFloat(yValue.replace("y1:", "").trim()))*100;
+                }
+            } else if (attr.includes("x2:")) {
+                var tmproom = storageDataConvert.rooms.find(x => x.id == roomId);
+                var xValue = data.find(x => x.includes("x1:"))
+                if (tmproom) {
+                    if (!tmproom.zone) {
+                        tmproom.zone = {};
+                    }
+                    tmproom.zone.width = (parseFloat(attr.replace("x2:", "").trim()) - parseFloat(xValue.replace("x1:", "").trim()))*100;
+                }
+            }
+        });
+    })
+
+        var probesString = roomsString.replace("rooms:", "").split("\n");
+        probesString.forEach(probeString => {
+            if (probeString) {
+                var elems = probeString.split(":");
+                var name = elems[0].replace(":","").trim();
+                var value = JSON.parse(elems[1].trim());
+                var tmproom = storageDataConvert.rooms.find(x => x.name == name);
+                if (tmproom) {
+                    tmproom.probes.push({
+                    id: uuidv4(),
+                    color: "#ffffff40",
+                    coverage: 500,
+                    x: value[0]*100,
+                    y: value[1]*100,
+                    z: value[2]*100,
+                    width: 5,
+                    height: 15
+                });
+                }
+            }
+        });
+        console.log(storageDataConvert);
+        // Will overight localstorage rooms with result of conversion of uncommenting
+        //window.localStorage.setItem("rooms", JSON.stringify(storageDataConvert));
+});

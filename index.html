@@ -21,6 +21,10 @@
                 <!-- Rooms go here, generated in javascript -->
             </div>
             <div class="buttons">
+                <div class="side-by-side">
+                    <button onclick="toggleDevices()" class="toggleDevices">Toggle tracked devices</button>
+                    <button onclick="devicesSettings()" class="devicesSettings"><i class="fas fa-cog"></i></button>
+                </div>
                 <button onclick="toggleProbeRadiuses()" class="toggleCoverage">Toggle ESP32's coverage</button>
                 <div class="side-by-side">
                     <button onclick="reset()" class="delete-all">Reset</button>
@@ -57,6 +61,42 @@
                     </div>
                     <button id="probe" class="add-probe-btn" title="Add an ESPresense device"><i class="fas fa-plus info-txt"></i></button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal mqtt-settings">
+        <div class="modal-backdrop"></div>
+        <div class="modal-window">
+            <div class="text">
+                <div class="container">
+                    <div class="left">
+                        <div class="input-elem">
+                            <label>Host:</label> <input placeholder="192.168.1.13" class="host" type="text">
+                        </div>
+                        <div class="input-elem">
+                            <label>Port:</label> <input placeholder="1884" class="port" type="number">
+                        </div>
+                        <div class="input-elem">
+                            <label>Topic:</label> <input placeholder="espresense/ips" class="topic" type="text"><span>/#</span>
+                        </div>
+                        <div class="input-elem">
+                            <label>username:</label> <input class="username" type="text">
+                        </div>
+                        <div class="input-elem">
+                            <label>password:</label> <input class="password" type="password">
+                        </div>
+
+                        <button class="mqtt-connect" onclick="connectMQTT()">Connect</button>
+                    </div>
+                    <div class="right">
+
+                    </div>
+                </div>
+            </div>
+            <div class="buttons">
+                <button onclick="closeModal('.mqtt-settings')" class="close">Cancel</button>
+                <button onclick="saveMqtt()">Save</button>
             </div>
         </div>
     </div>
@@ -111,6 +151,29 @@
             </div>
         </div>
     </div>
+
+    <div class="modal yaml-to-json-modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-window">
+            <div class="text">
+                <div class="container yaml-conv">
+                    <div class="left yaml-conv">
+                        <span class="title">yaml</span>
+                        <textarea class="yaml-data"></textarea>
+                    </div>
+                    <div class="right">
+                        <span class="title" style="color:white;">json</span>
+                        <textarea class="json-data"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons">
+                <button onclick="closeModal('.yaml-to-json-modal')" class="close">Cancel</button>
+                <button onclick="saveConvertedData()">Save</button>
+            </div>
+        </div>
+    </div>
+    <script src="phao-mqtt.min.js" type="text/javascript"></script>
     <script src="script.js"></script>
 </body>
 

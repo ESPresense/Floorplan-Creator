@@ -206,6 +206,15 @@ button#probe {
     overflow: auto;
 }
 
+button.devicesSettings {
+    max-width: 40px;
+    font-size: 21px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 button#probe.active {
     background: #335bd0;
 }
@@ -321,7 +330,7 @@ button#more {
     display: flex;
 }
 
-button.toggleCoverage.active {
+.buttons button.active {
     background: #335bd0;
 }
 
@@ -340,4 +349,30 @@ input[type="color"]::-webkit-color-swatch-wrapper {
 
 input[type="color"]::-webkit-color-swatch {
     border: none;
+}
+
+.buttons button:disabled {
+    opacity: 0.2;
+}
+
+.left.yaml-conv {
+    max-width: initial !important;
+    flex: 1;
+}
+
+.container.yaml-conv>div {
+    min-height: 400px;
+}
+
+.container.yaml-conv>div>textarea {
+    height: 100%;
+    background: #373737;
+    color: white;
+    padding: 15px;
+}
+
+span.title {
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 20px;
 }
