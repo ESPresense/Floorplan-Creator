@@ -269,12 +269,12 @@ function exportToYaml() {
     //get most left x value
     if (jsonStorage.rooms.length) {
         var mostLeftRoom = jsonStorage.rooms.reduce(function(prev, curr) {
-            return prev.zone.x < curr.zone.x ? prev : curr;
+            return prev.zone.x <= curr.zone.x ? prev : curr;
         });
 
         // get highest y value
         var mostTopRoom = jsonStorage.rooms.reduce(function(prev, curr) {
-            return prev.zone.y < curr.zone.y ? prev : curr;
+            return prev.zone.y <= curr.zone.y ? prev : curr;
         });
 
         // create an offseter
@@ -484,12 +484,12 @@ function openProbeModal(id, probeId) {
     //get most left x value
     if (jsonStorage.rooms.length) {
         var mostLeftRoom = jsonStorage.rooms.reduce(function(prev, curr) {
-            return prev.zone.x < curr.zone.x ? prev : curr;
+            return prev.zone.x <= curr.zone.x ? prev : curr;
         });
 
         // get highest y value
         var mostTopRoom = jsonStorage.rooms.reduce(function(prev, curr) {
-            return prev.zone.y < curr.zone.y ? prev : curr;
+            return prev.zone.y <= curr.zone.y ? prev : curr;
         });
 
         // create an offseter
