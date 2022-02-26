@@ -6,6 +6,14 @@ This application is developped in HTML/JS/CSS, no libraries (but fontawesome on 
 
 This project is a work in progress.
 
+## How to use
+- Download the project
+- open "index.html" with a browser
+- start drawing each rooms
+- add esp32 devices inside each room
+- export to yaml
+- copy generated code over to ESPresenseIPS app.js file
+
 ## Changes
 26-02-2022
 - Show ESP32 device coverage button
@@ -34,6 +42,26 @@ This project is a work in progress.
 [✓] Export esp32 position from rooms to ESPresenseIPS yaml format.  
 [✓] Have each esp32 bluetooth signal radius visible on plan to make sure you have at least 3 signals in each rooms. (will help determine where is the best place to put them ;)).  
 [  ] Code refactoring, add comments.
+
+## Technical
+
+Positions are calculated as followed : 
+- find the room with the smallest x value (left side of screen)
+- find the room with the smallest y value (top of screen)
+- generate an offset with those 2 values (which means "smallestX, smallestY" is now the "0,0" position
+- every position saved from drawn rooms are then recalculated with this offset
+
+Scroll :
+- The scroll moves the floorplan on the canvas
+- the scroll position are updated directly in the storage (rather than offsetting everywhere in the code)
+- the initial coordinates of each room WILL change if you scroll
+- This is of no effect on the final exported values thaks to the way they are calculated on export
+
+ESP32 Devices :
+- Devices export only x, y, z values
+- Device has its room's name when exported to yaml
+- z value is set to 0 by default and can be changed when opening the device modal (green square under room name in right menu)
+- coverage and color value are only for display purposes (they are not exported)
 
 ## A little glimps
 
