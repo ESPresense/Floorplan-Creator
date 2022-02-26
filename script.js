@@ -352,8 +352,8 @@ function exportToYaml() {
         console.log(exportedValue);
     } else {
         // THIS MODAL IS FOR DEV, CONVERTS YAML BACK TO JSON without some elements
-        var modal = document.querySelector(".yaml-to-json-modal");
-        modal.classList.add("visible");
+        //var modal = document.querySelector(".yaml-to-json-modal");
+        //modal.classList.add("visible");
     }
 }
 
