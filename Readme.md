@@ -42,7 +42,7 @@ This project is a work in progress.
 [✓] Ability to add esp32 in rooms and position them with precision.  
 [✓] Export esp32 position from rooms to ESPresenseIPS yaml format.  
 [✓] Have each esp32 bluetooth signal radius visible on plan to make sure you have at least 3 signals in each rooms. (will help determine where is the best place to put them ;)).  
-[  ] MQTT client to show devices on the floorplan directly.
+[  ] MQTT client to show devices on the floorplan directly.   
 [  ] Code refactoring, add comments.
 
 ## Technical
