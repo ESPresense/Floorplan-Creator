@@ -15,6 +15,9 @@ This project is a work in progress.
 - copy generated code over to ESPresenseIPS app.js file
 
 ## Changes
+27-02-2022
+- Show arrow indicators on top, left, bottom and right of canvas if floorplan is out of screen to indicate on which side/s it is
+
 26-02-2022
 - MQTT controle panel now displays connected devices (and known devices even if not connected anymore)
 - MQTT Client to track devices

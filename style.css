@@ -395,3 +395,40 @@ button.mqtt-connect {
     color: white;
     padding: 10px 10px;
 }
+
+.indicator {
+    position: absolute;
+    font-size: 90px;
+    pointer-events: none;
+    opacity: 0;
+    transition: all .25s ease-in-out;
+}
+
+.indicator.left {
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+}
+
+.indicator.rightt {
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.indicator.top {
+    top: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.indicator.bottom {
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.indicator.visible {
+    opacity: 1;
+    transition: all 0.25s ease-in-out;
+}

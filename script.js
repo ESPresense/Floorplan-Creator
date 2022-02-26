@@ -653,8 +653,52 @@ function handleScroll(e) {
     }
 
     updateRoomsPosition(scrollOffsetX, scrollOffsetY);
+    checkIfAllRoomsOutOfScreen();
     //updateDevicesPosition(scrollOffsetX, scrollOffsetY);
     render(null, false);
+}
+
+function checkIfAllRoomsOutOfScreen() {
+    var data = getRooms();
+    var leftLimit = 0;
+    var rightLimit = canvas.width;
+    var topLimit = 0;
+    var bottomLimit = canvas.height;
+
+    var atleastOneIsVisible = false;
+    var directions = [];
+    for (let index = 0; index < data.rooms.length; index++) {
+        const room = data.rooms[index];
+        if (room.zone.x + room.zone.width > leftLimit &&
+            room.zone.x < rightLimit &&
+            room.zone.y + room.zone.height > topLimit &&
+            room.zone.y < bottomLimit) {
+            atleastOneIsVisible = true;
+            break;
+        } else {
+            if (room.zone.x + room.zone.width < leftLimit) {
+                directions.push("left");
+            } else if (room.zone.x > rightLimit) {
+                directions.push("rightt");
+            } else if (room.zone.y + room.zone.height < topLimit) {
+                directions.push("top");
+            } else if (room.zone.y > bottomLimit) {
+                directions.push("bottom");
+            }
+        }
+    }
+
+    var indicators = document.querySelectorAll(".indicator");
+    indicators.forEach(indicator => {
+        indicator.classList.remove("visible");
+    });
+    directions = [...new Set(directions)];
+    directions.forEach(direction => {
+        var indic = document.querySelector(".indicator." + direction);
+        if (indic) {
+            indic.classList.add("visible");
+        }
+    })
 }
 
 function updateDevicesPosition(scrollOffsetX, scrollOffsetY) {
