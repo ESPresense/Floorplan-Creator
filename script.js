@@ -692,13 +692,15 @@ function checkIfAllRoomsOutOfScreen() {
     indicators.forEach(indicator => {
         indicator.classList.remove("visible");
     });
-    directions = [...new Set(directions)];
-    directions.forEach(direction => {
-        var indic = document.querySelector(".indicator." + direction);
-        if (indic) {
-            indic.classList.add("visible");
-        }
-    })
+    if (!atleastOneIsVisible) {
+        directions = [...new Set(directions)];
+        directions.forEach(direction => {
+            var indic = document.querySelector(".indicator." + direction);
+            if (indic) {
+                indic.classList.add("visible");
+            }
+        })
+    }
 }
 
 function updateDevicesPosition(scrollOffsetX, scrollOffsetY) {
