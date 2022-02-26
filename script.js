@@ -15,6 +15,8 @@ var probePositionY = 0;
 var firstCoordinateOffsetX = 0;
 var firstCoordinateOffsetY = 0;
 
+var showESPCoverage = false;
+
 // get stock container to pick element to clone and inject
 var selfStorage = document.getElementById("stock");
 
@@ -108,6 +110,14 @@ function render(hightlightId = null, renderButtons = true) {
                 room.probes.forEach(probe => {
                     ctxo.fillStyle = "#18b249";
                     ctxo.fillRect(probe.x, probe.y, probe.width, probe.height);
+
+                    if (showESPCoverage) {
+                        ctxo.beginPath();
+                        ctxo.fillStyle = probe.color;
+                        ctxo.arc(probe.x, probe.y, probe.coverage, 0, 2 * Math.PI);
+                        ctxo.fill();
+                        ctxo.closePath();
+                    }
                 });
 
                 // if buttons have to be re-rendered, reset them based on localstorage
@@ -117,6 +127,15 @@ function render(hightlightId = null, renderButtons = true) {
             });
         }
     }
+}
+
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color + "40";
 }
 
 // reset deletes the rooms in the local storage
@@ -203,6 +222,8 @@ function setProbe(x, y, roomId) {
     }
     var probeData = {
         id: uuidv4(),
+        color: getRandomColor(),
+        coverage: 500,
         x: x,
         y: y,
         z: 0,
@@ -487,6 +508,10 @@ function openProbeModal(id, probeId) {
     modal.querySelector(".probe-z").value = probe.z ? probe.z : 0;
     var code = (room.name ? room.name : "Room" + room.id) + ": [" + (x / 100) + ", " + (y / 100) + ", " + (probe.z / 100) + "]";
     document.querySelector(".code-area").innerHTML = code;
+
+    modal.querySelector(".coverage").value = probe.coverage;
+    modal.querySelector(".coverage-color").value = probe.color.slice(0, -2);
+
     modal.classList.add("visible");
 }
 
@@ -503,13 +528,18 @@ function deleteProbe() {
 }
 
 function saveProbe() {
-    var value = document.querySelector(".probe-z").value;
+    var valueZ = document.querySelector(".probe-z").value;
+    var coverageValue = document.querySelector(".coverage").value;
+    var coverageColor = document.querySelector(".coverage-color").value + "40";
     var data = getRooms();
     var room = data.rooms.find(x => x.id == activeProbeModalData.roomId);
     var probe = room.probes.find(x => x.id == activeProbeModalData.probe.id);
-    probe.z = parseInt(value);
+    probe.z = parseInt(valueZ);
+    probe.coverage = coverageValue;
+    probe.color = coverageColor;
     setRooms(data);
     closeModal(".probe-modal");
+    render(null, false);
 }
 
 function addRoomItemToList(id, room) {
@@ -764,6 +794,14 @@ function handleMouseMove(e) {
         ctx.fillStyle = "#18b249";
         ctx.fillRect(positionX, positionY, width, height);
 
+        if (showESPCoverage) {
+            ctx.beginPath();
+            ctx.fillStyle = "#ffffff40";
+            ctx.arc(probePositionX, probePositionY, 500, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.closePath();
+        }
+
         drawCross(positionX, positionY, room, height, width);
         drawCrossMesures(positionX, positionY, room, height, width);
     }
@@ -807,6 +845,16 @@ function handleMouseMove(e) {
     prevHeight = height;
 }
 
+function toggleProbeRadiuses() {
+    showESPCoverage = !showESPCoverage;
+    var button = document.querySelector(".toggleCoverage");
+    if (showESPCoverage) {
+        button.classList.add("active");
+    } else {
+        button.classList.remove("active");
+    }
+    render(null, false);
+}
 
 function drawCrossMesures(positionX, positionY, room, height, width) {
     ctx.font = "15px Helvetica";

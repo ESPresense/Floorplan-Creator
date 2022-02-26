@@ -8,6 +8,13 @@ This project is a work in progress.
 
 ## Changes
 26-02-2022
+- Show ESP32 device coverage button
+- ESP32 coverage shown as a circle around the device
+- Coverage distance is ajustable
+- Circle color is adjustable
+- Coverage circle can be visible when placing device to help positioning it right
+
+25-02-2022
 - Dark Theme
 - Fix yaml floorplan coordinates (was in cm needs m)
 - Icons and small UI tweaks
@@ -25,7 +32,7 @@ This project is a work in progress.
 [  ] Pan on the canvas.      
 [✓] Ability to add esp32 in rooms and position them with precision.  
 [✓] Export esp32 position from rooms to ESPresenseIPS yaml format.  
-[  ] Have each esp32 bluetooth signal radius visible on plan to make sure you have at least 3 signals in each rooms. (will help determine where is the best place to put them ;)).  
+[✓] Have each esp32 bluetooth signal radius visible on plan to make sure you have at least 3 signals in each rooms. (will help determine where is the best place to put them ;)).  
 [  ] Code refactoring, add comments.
 
 ## A little glimps

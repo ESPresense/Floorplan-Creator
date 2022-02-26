@@ -36,7 +36,7 @@ body {
     display: flex;
 }
 
-.buttons>button {
+.buttons button {
     flex: 1;
     font-size: 14px;
     padding: 15px 5px;
@@ -252,6 +252,7 @@ button#probe.active {
     border-radius: 0px;
     border: solid 1px #656565;
     padding-left: 10px;
+    min-width: 50px;
 }
 
 .input-elem>label {
@@ -306,4 +307,33 @@ button.delete-probe {
 
 button#more {
     background: #535353;
+}
+
+.interfaces>.buttons {
+    flex-direction: column;
+}
+
+.side-by-side {
+    display: flex;
+}
+
+button.toggleCoverage.active {
+    background: #335bd0;
+}
+
+input[type="color"] {
+    -webkit-appearance: none;
+    width: 32px;
+    height: 32px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    padding: 0;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+input[type="color"]::-webkit-color-swatch {
+    border: none;
 }

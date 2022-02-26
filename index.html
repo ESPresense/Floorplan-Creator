@@ -21,8 +21,11 @@
                 <!-- Rooms go here, generated in javascript -->
             </div>
             <div class="buttons">
-                <button onclick="reset()" class="delete-all">Reset</button>
-                <button onclick="exportToYaml()" class="delete-all">Export to YAML</button>
+                <button onclick="toggleProbeRadiuses()" class="toggleCoverage">Toggle ESP32's coverage</button>
+                <div class="side-by-side">
+                    <button onclick="reset()" class="delete-all">Reset</button>
+                    <button onclick="exportToYaml()" class="delete-all">Export to YAML</button>
+                </div>
             </div>
         </div>
     </div>
@@ -85,6 +88,12 @@
                         </div>
                         <div class="input-elem">
                             <label>z:</label> <input class="probe-z" type="number"><span>cm</span>
+                        </div>
+                        <div class="input-elem">
+                            <label>coverage:</label> <input class="coverage" type="number"><span>cm</span>
+                        </div>
+                        <div class="input-elem">
+                            <label>coverage color:</label> <input class="coverage-color" type="color">
                         </div>
 
                         <button class="delete-probe" onclick="deleteProbe()">Delete</button>
