@@ -96,7 +96,7 @@ rooms:
     kitchen: [0.035, 2.285, 0]
     bedroom: [3.68, 11.045, 1.2]
     livingroom: [3.59, 5.805, 1.2]
-    second-bedroom: [7.275, 5.559928991794586, 0]
+    second_bedroom: [7.275, 5.559928991794586, 0]
     office: [10.48, 2.715, 0]
 roomplans:
     - name: kitchen
