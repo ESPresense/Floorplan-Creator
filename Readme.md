@@ -46,6 +46,11 @@ This project is a work in progress.
 
 ## Technical
 
+U / L Shaped rooms :
+- Create multiple rooms to acheve the desired shape
+- Name them all with the same name
+- ESPresenseIPS should send the same name to home assistant if the user is in any of those rooms.
+
 Positions are calculated as followed : 
 - find the room with the smallest x value (left side of screen)
 - find the room with the smallest y value (top of screen)
