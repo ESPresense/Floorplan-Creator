@@ -11,7 +11,7 @@ This project is a work in progress.
 - open "index.html" with a browser
 - start drawing each rooms
 - add esp32 devices inside each room
-- export to yaml
+- click the "export to yaml" button
 - copy generated code over to ESPresenseIPS app.js file
 
 ## Changes
@@ -55,7 +55,7 @@ Scroll :
 - The scroll moves the floorplan on the canvas
 - the scroll position are updated directly in the storage (rather than offsetting everywhere in the code)
 - the initial coordinates of each room WILL change if you scroll
-- This is of no effect on the final exported values thaks to the way they are calculated on export
+- This is of no effect on the final exported values thanks to the way they are calculated before exporting.
 
 ESP32 Devices :
 - Devices export only x, y, z values
