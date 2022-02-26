@@ -81,7 +81,7 @@ Deleted Local storage.... Oups ! (if you have exported the yaml code before) :
 - Go into the script.js file, look for "THIS MODAL IS FOR DEV"
 - Uncomment the 2 lines below the comment
 - Have a look at the conversion code if needed in "document.querySelector(".yaml-data").addEventListener("keyup", ..."
-- now in the app, if you click on "Export to yaml", a modal will open with 2 text areas
+- now in the app, if you click on "Export to yaml" (given no rooms are drawn at all), a modal will open with 2 text areas
 - paste your yaml code into the yaml (left) area.
 - on the right you should see the corresponding json object.
 - click "save" and reload, you should see your floorplan again.
