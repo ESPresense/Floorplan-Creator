@@ -87,16 +87,29 @@
                             <label>password:</label> <input class="password" type="password">
                         </div>
 
-                        <button class="mqtt-connect" onclick="connectMQTT()">Connect</button>
+                        <button class="mqtt-connect" onclick="connectMQTT()">Connect and Save</button>
                     </div>
                     <div class="right">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Device name</th>
+                                    <th>Color</th>
+                                    <th>x</th>
+                                    <th>y</th>
+                                    <th>z</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
             <div class="buttons">
-                <button onclick="closeModal('.mqtt-settings')" class="close">Cancel</button>
-                <button onclick="saveMqtt()">Save</button>
+                <button onclick="closeModal('.mqtt-settings')" class="close">Close</button>
+                <!-- <button onclick="saveMqtt()">Save</button> -->
             </div>
         </div>
     </div>

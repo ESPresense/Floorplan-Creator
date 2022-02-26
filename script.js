@@ -1011,24 +1011,26 @@ function onMessageArrived(msg) {
     mqttDevicesLatestMessage[objectMsg.name] = objectMsg;
     upsertDevice(objectMsg);
     render(null, false);
+    updateDevicesArray();
 }
 
 function upsertDevice(objectMsg) {
     var devicesString = window.localStorage.getItem("devices");
-    
-    var localDevices = []
+
+    var localDevices = {};
+
     if (devicesString) {
         localDevices = JSON.parse(devicesString);
     }
-    var device = localDevices[objectMsg.name];
-    if (device) {
-        device.data = objectMsg;
+    if (localDevices[objectMsg.name]) {
+        localDevices[objectMsg.name].data = objectMsg;
     } else {
         localDevices[objectMsg.name] = {
             data: objectMsg,
             color: "#ffffff80"
         }
     }
+
     window.localStorage.setItem("devices", JSON.stringify(localDevices));
 }
 
@@ -1110,7 +1112,46 @@ function devicesSettings() {
     modal.querySelector(".password").value = mqttInitData.password;
     //modal.querySelector(".coverage-color").value = probe.color.slice(0, -2);
 
+    updateDevicesArray();
+
     modal.classList.add("visible");
+}
+
+function updateDevicesArray() {
+    var body = document.querySelector(".mqtt-settings tbody");
+
+    if (body) {
+        var devicesString = window.localStorage.getItem("devices");
+        var devices = JSON.parse(devicesString);
+        if (devices) {
+            body.innerHTML = "";
+            Object.keys(devices).forEach(deviceName => {
+                var tr = document.createElement("tr");
+
+                var tdName = document.createElement("td");
+                tdName.innerHTML = deviceName;
+                var tdColor = document.createElement("td");
+                var input = document.createElement("input");
+                input.type = "color";
+                input.value = devices[deviceName].color.slice(0, -2);
+                tdColor.append(input);
+                var tdX = document.createElement("td");
+                tdX.innerHTML = Math.round(devices[deviceName].data.x * 10) / 10;
+                var tdY = document.createElement("td");
+                tdY.innerHTML = Math.round(devices[deviceName].data.y * 10) / 10;
+                var tdZ = document.createElement("td");
+                tdZ.innerHTML = Math.round(devices[deviceName].data.z * 10) / 10;
+
+                tr.append(tdName);
+                tr.append(tdColor);
+                tr.append(tdX);
+                tr.append(tdY);
+                tr.append(tdZ);
+
+                body.append(tr);
+            })
+        }
+    }
 }
 
 function saveMqtt() {
@@ -1141,7 +1182,7 @@ document.querySelector(".yaml-data").addEventListener("keyup", event => {
     var floorplanRooms = floorplanString.match(/(-([\s\S]*?)((?:[^\n]+\n){5}))/g);
     var idx = floorplanString.lastIndexOf('-')
     var lastRoom = floorplanString.substring(idx + 1).trim()
-    floorplanRooms.push("- "+lastRoom);
+    floorplanRooms.push("- " + lastRoom);
 
     var storageDataConvert = {
         rooms: []
@@ -1152,10 +1193,10 @@ document.querySelector(".yaml-data").addEventListener("keyup", event => {
         var data = room.split("\n");
         var roomName = "";
         var roomId = -1;
-        data.forEach((attr , index)=> {
-            if(attr.includes("- name:")) {
+        data.forEach((attr, index) => {
+            if (attr.includes("- name:")) {
                 roomName = attr.replace("- name:", "").trim();
-                roomId = roomIndex+1;
+                roomId = roomIndex + 1;
                 roomX = 0;
                 roomY = 0;
                 storageDataConvert.rooms.push({
@@ -1174,7 +1215,7 @@ document.querySelector(".yaml-data").addEventListener("keyup", event => {
                     if (!tmproom.zone) {
                         tmproom.zone = {};
                     }
-                    tmproom.zone.y = parseFloat(attr.replace("y1:", "").trim())*100;
+                    tmproom.zone.y = parseFloat(attr.replace("y1:", "").trim()) * 100;
                 }
             } else if (attr.includes("x1:")) {
                 var tmproom = storageDataConvert.rooms.find(x => x.id == roomId);
@@ -1182,7 +1223,7 @@ document.querySelector(".yaml-data").addEventListener("keyup", event => {
                     if (!tmproom.zone) {
                         tmproom.zone = {};
                     }
-                    tmproom.zone.x = parseFloat(attr.replace("x1:", "").trim())*100;
+                    tmproom.zone.x = parseFloat(attr.replace("x1:", "").trim()) * 100;
                 }
             } else if (attr.includes("y2:")) {
                 var tmproom = storageDataConvert.rooms.find(x => x.id == roomId);
@@ -1191,7 +1232,7 @@ document.querySelector(".yaml-data").addEventListener("keyup", event => {
                     if (!tmproom.zone) {
                         tmproom.zone = {};
                     }
-                    tmproom.zone.height = (parseFloat(attr.replace("y2:", "").trim()) - parseFloat(yValue.replace("y1:", "").trim()))*100;
+                    tmproom.zone.height = (parseFloat(attr.replace("y2:", "").trim()) - parseFloat(yValue.replace("y1:", "").trim())) * 100;
                 }
             } else if (attr.includes("x2:")) {
                 var tmproom = storageDataConvert.rooms.find(x => x.id == roomId);
@@ -1200,34 +1241,34 @@ document.querySelector(".yaml-data").addEventListener("keyup", event => {
                     if (!tmproom.zone) {
                         tmproom.zone = {};
                     }
-                    tmproom.zone.width = (parseFloat(attr.replace("x2:", "").trim()) - parseFloat(xValue.replace("x1:", "").trim()))*100;
+                    tmproom.zone.width = (parseFloat(attr.replace("x2:", "").trim()) - parseFloat(xValue.replace("x1:", "").trim())) * 100;
                 }
             }
         });
     })
 
-        var probesString = roomsString.replace("rooms:", "").split("\n");
-        probesString.forEach(probeString => {
-            if (probeString) {
-                var elems = probeString.split(":");
-                var name = elems[0].replace(":","").trim();
-                var value = JSON.parse(elems[1].trim());
-                var tmproom = storageDataConvert.rooms.find(x => x.name == name);
-                if (tmproom) {
-                    tmproom.probes.push({
+    var probesString = roomsString.replace("rooms:", "").split("\n");
+    probesString.forEach(probeString => {
+        if (probeString) {
+            var elems = probeString.split(":");
+            var name = elems[0].replace(":", "").trim();
+            var value = JSON.parse(elems[1].trim());
+            var tmproom = storageDataConvert.rooms.find(x => x.name == name);
+            if (tmproom) {
+                tmproom.probes.push({
                     id: uuidv4(),
                     color: "#ffffff40",
                     coverage: 500,
-                    x: value[0]*100,
-                    y: value[1]*100,
-                    z: value[2]*100,
+                    x: value[0] * 100,
+                    y: value[1] * 100,
+                    z: value[2] * 100,
                     width: 5,
                     height: 15
                 });
-                }
             }
-        });
-        console.log(storageDataConvert);
-        // Will overight localstorage rooms with result of conversion of uncommenting
-        //window.localStorage.setItem("rooms", JSON.stringify(storageDataConvert));
+        }
+    });
+    console.log(storageDataConvert);
+    // Will overight localstorage rooms with result of conversion of uncommenting
+    //window.localStorage.setItem("rooms", JSON.stringify(storageDataConvert));
 });

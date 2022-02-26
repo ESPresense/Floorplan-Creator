@@ -376,3 +376,22 @@ span.title {
     margin-bottom: 10px;
     font-size: 20px;
 }
+
+thead>tr>th {
+    padding: 5px 15px;
+    font-size: 16px;
+    border-bottom: solid 1px white;
+    color: white;
+}
+
+tbody>tr>td {
+    padding: 5px 10px;
+}
+
+button.mqtt-connect {
+    background: #335bd0;
+    border: solid 1px #335bd0;
+    border-radius: 3px;
+    color: white;
+    padding: 10px 10px;
+}

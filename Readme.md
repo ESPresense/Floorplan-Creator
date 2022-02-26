@@ -16,6 +16,7 @@ This project is a work in progress.
 
 ## Changes
 26-02-2022
+- MQTT controle panel now displays connected devices (and known devices even if not connected anymore)
 - MQTT Client to track devices
 - MQTT settings page to input config
 - show devices on the floorplan realtime
@@ -48,6 +49,7 @@ This project is a work in progress.
 [✓] Export esp32 position from rooms to ESPresenseIPS yaml format.  
 [✓] Have each esp32 bluetooth signal radius visible on plan to make sure you have at least 3 signals in each rooms. (will help determine where is the best place to put them ;)).  
 [✓] MQTT client to show devices on the floorplan directly.   
+[  ] Allow changing the precision while dragging/creating a room.    
 [  ] Code refactoring, add comments.
 
 ## Technical
@@ -74,6 +76,75 @@ ESP32 Devices :
 - Device has its room's name when exported to yaml
 - z value is set to 0 by default and can be changed when opening the device modal (green square under room name in right menu)
 - coverage and color value are only for display purposes (they are not exported)
+
+Deleted Local storage.... Oups ! (if you have exported the yaml code before) :
+- Go into the script.js file, look for "THIS MODAL IS FOR DEV"
+- Uncomment the 2 lines below the comment
+- Have a look at the conversion code if needed in "document.querySelector(".yaml-data").addEventListener("keyup", ..."
+- now in the app, if you click on "Export to yaml", a modal will open with 2 text areas
+- paste your yaml code into the yaml (left) area.
+- on the right you should see the corresponding json object.
+- click "save" and reload, you should see your floorplan again.
+- This feature is experimental, the conversion process is poorly coded and might be working only for a specific syntax (see floorplan code below for example of what the conversion process has been coded for)
+- The conversion does NOT recalculate label position for rooms so you will have labels top left and some undefined in the right menu. but it can save you some time and you can still work on it and export updated yaml without issues
+- This is a bonus safety net, if it works, be happy, if it dosent, then start drawing. I probably won't updating this "feature"
+
+
+Try to have rooms: ... then roomplans: ... , for roomplans, have y1, x1, y2, x2 in that order. rooms: names should match the roomplans: names (because the app need to put a device in a room and the mathcing is done with the name)
+```
+rooms:
+    kitchen: [0.035, 2.285, 0]
+    bedroom: [3.68, 11.045, 1.2]
+    livingroom: [3.59, 5.805, 1.2]
+    second-bedroom: [7.275, 5.559928991794586, 0]
+    office: [10.48, 2.715, 0]
+roomplans:
+    - name: kitchen
+        y1: 0
+        x1: 0
+        y2: 4.29
+        x2: 3.59
+    - name: bathroom
+        y1: 4.29
+        x1: 0
+        y2: 6.72
+        x2: 2.36
+    - name: toilet
+        y1: 6.72
+        x1: 0
+        y2: 7.98
+        x2: 2.36
+    - name: second_bedroom
+        y1: 7.98
+        x1: 0
+        y2: 12.06
+        x2: 3.68
+    - name: bedroom
+        y1: 7.98
+        x1: 3.68
+        y2: 12.06
+        x2: 7.6
+    - name: entrance
+        y1: 4.29
+        x1: 2.36
+        y2: 7.98
+        x2: 3.59
+    - name: entrance
+        y1: 6.2
+        x1: 3.59
+        y2: 7.98
+        x2: 7.6
+    - name: livingroom
+        y1: 1.37
+        x1: 3.59
+        y2: 6.2
+        x2: 7.6
+    - name: office
+        y1: 0
+        x1: 7.6
+        y2: 4.92
+        x2: 10.53
+```
 
 ## A little glimps
 
