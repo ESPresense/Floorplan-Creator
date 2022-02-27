@@ -14,6 +14,12 @@ This project is a work in progress.
 - click the "export to yaml" button
 - copy generated code over to ESPresenseIPS app.js file
 
+- after config is copied and AppDaemon restarted
+- open MQTT configuration panel (⚙) and enter your config
+- devices will show up on the floorplan in real time
+- devices will also appear in the list in mqtt config panel
+- enjoy tweaking everything to make it perfect
+
 ## Changes
 27-02-2022
 - Recovery / Yaml to json experimental feature available.
