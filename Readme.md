@@ -16,6 +16,8 @@ This project is a work in progress.
 
 ## Changes
 27-02-2022
+- Recovery / Yaml to json experimental feature available.
+- Fix Recovery "undefinedundefined" in right menu
 - Show arrow indicators on top, left, bottom and right of canvas if floorplan is out of screen to indicate on which side/s it is
 
 26-02-2022
