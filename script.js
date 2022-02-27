@@ -1,3 +1,57 @@
+const PLACEHOLDER = "\
+rooms:\n\
+\tkitchen: [0.035, 2.285, 0]\n\
+\tsecond_bedroom: [0.015, 11.555, 0]\n\
+\tbedroom: [3.68, 11.045, 1.2]\n\
+\tlivingroom: [3.59, 5.805, 1.2]\n\
+\toffice: [10.48, 2.715, 0]\n\
+roomplans:\n\
+\t- name: kitchen\n\
+\t\ty1: 0\n\
+\t\tx1: 0\n\
+\t\ty2: 4.29\n\
+\t\tx2: 3.59\n\
+\t- name: bathroom\n\
+\t\ty1: 4.29\n\
+\t\tx1: 0\n\
+\t\ty2: 6.72\n\
+\t\tx2: 2.36\n\
+\t- name: toilet\n\
+\t\ty1: 6.72\n\
+\t\tx1: 0\n\
+\t\ty2: 7.98\n\
+\t\tx2: 2.36\n\
+\t- name: second_bedroom\n\
+\t\ty1: 7.98\n\
+\t\tx1: 0\n\
+\t\ty2: 12.06\n\
+\t\tx2: 3.68\n\
+\t- name: bedroom\n\
+\t\ty1: 7.98\n\
+\t\tx1: 3.68\n\
+\t\ty2: 12.06\n\
+\t\tx2: 7.6\n\
+\t- name: entrance\n\
+\t\ty1: 4.29\n\
+\t\tx1: 2.36\n\
+\t\ty2: 7.98\n\
+\t\tx2: 3.59\n\
+\t- name: entrance\n\
+\t\ty1: 6.2\n\
+\t\tx1: 3.59\n\
+\t\ty2: 7.98\n\
+\t\tx2: 7.6\n\
+\t- name: livingroom\n\
+\t\ty1: 1.37\n\
+\t\tx1: 3.59\n\
+\t\ty2: 6.2\n\
+\t\tx2: 7.6\n\
+\t- name: office\n\
+\t\ty1: 0\n\
+\t\tx1: 7.6\n\
+\t\ty2: 4.92\n\
+\t\tx2: 10.53";
+
 // get references to the canvas and context
 var canvas = document.getElementById("canvas");
 var overlay = document.getElementById("overlay");
@@ -350,11 +404,14 @@ function exportToYaml() {
         modal.querySelector(".text").innerHTML = exportedValue.replaceAll("\n", "<br />").replaceAll("\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
         modal.classList.add("visible");
         console.log(exportedValue);
-    } else {
-        // THIS MODAL IS FOR DEV, CONVERTS YAML BACK TO JSON without some elements
-        //var modal = document.querySelector(".yaml-to-json-modal");
-        //modal.classList.add("visible");
     }
+}
+
+function yamlToJsonEXP() {
+    alert("This is an experimental feature, the conversion agorithm is an abomination and relies on a strict syntax. There will be no support on this feature, you can tweak it yourself if you want");
+    var modal = document.querySelector(".yaml-to-json-modal");
+    modal.classList.add("visible");
+    document.querySelector(".yaml-data").placeholder = PLACEHOLDER;
 }
 
 function closeModal(id) {
@@ -1252,8 +1309,12 @@ document.querySelector(".yaml-data").addEventListener("keyup", event => {
                     id: roomId,
                     zone: {},
                     text: {
-                        width: {},
-                        height: {}
+                        width: {
+                            label: "width: n/a &nbsp;",
+                        },
+                        height: {
+                            label: "height: n/a",
+                        }
                     },
                     probes: []
                 });

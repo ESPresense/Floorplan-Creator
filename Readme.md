@@ -80,11 +80,10 @@ ESP32 Devices :
 - z value is set to 0 by default and can be changed when opening the device modal (green square under room name in right menu)
 - coverage and color value are only for display purposes (they are not exported)
 
-Deleted Local storage.... Oups ! (if you have exported the yaml code before) :
-- Go into the script.js file, look for "THIS MODAL IS FOR DEV"
-- Uncomment the 2 lines below the comment
-- Have a look at the conversion code if needed in "document.querySelector(".yaml-data").addEventListener("keyup", ..."
-- now in the app, if you click on "Export to yaml" (given no rooms are drawn at all), a modal will open with 2 text areas
+Recovery / YAML to JSON / Deleted Local storage.... Oups ! (if you have exported the yaml code before) :
+- in the app, click the recovery button.
+- read the Alert, click ok
+- read the text on top of the modal
 - paste your yaml code into the yaml (left) area.
 - on the right you should see the corresponding json object.
 - click "save" and reload, you should see your floorplan again.

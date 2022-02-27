@@ -31,9 +31,10 @@
                 </div>
                 <button onclick="toggleProbeRadiuses()" class="toggleCoverage">Toggle ESP32's coverage</button>
                 <div class="side-by-side">
-                    <button onclick="reset()" class="delete-all">Reset</button>
-                    <button onclick="exportToYaml()" class="delete-all">Export to YAML</button>
+                    <button onclick="yamlToJsonEXP()" class="yamltojson">Recovery</button>
+                    <button onclick="exportToYaml()" class="jsontoyaml">Export to YAML</button>
                 </div>
+                <button onclick="reset()" class="delete-all">Reset</button>
             </div>
         </div>
     </div>
@@ -172,6 +173,12 @@
     <div class="modal yaml-to-json-modal">
         <div class="modal-backdrop"></div>
         <div class="modal-window">
+            <div class="title">Past your yaml code here (ether yaml code exported by this app or yaml code you created yourself)</div>
+            <div class="title">This will generate corresponding json code. clicking the save button will OVERWRITE the floorplan in the local storage</div>
+            <div class="title">This tool will not recalculate labels so floor plan will not display room name or mesures.</div>
+            <div class="title">a bundle of labels will float at position 0,0 as well</div>
+            <div class="title">please follow the syntax from the readme file or the placeholder</div>
+            <div class="title last">If anyone wishes to extend/rewrite this feature, Pull Requests are welcome</div>
             <div class="text">
                 <div class="container yaml-conv">
                     <div class="left yaml-conv">
