@@ -308,6 +308,7 @@ function setProbe(x, y, roomId) {
     }
     var probeData = {
         id: uuidv4(),
+        name: room.name + "-" + probe.id,
         color: getRandomColor(),
         coverage: 500,
         x: x,
@@ -433,16 +434,16 @@ function objToYaml(obj) {
         probesData.probes.forEach(probe => {
             var x = Math.abs(probe.x - firstCoordinateOffsetX);
             var y = Math.abs(probe.y - firstCoordinateOffsetY);
-            string += "\t" + probesData.roomName + ": [" + (x / 100) + "," + (y / 100) + "," + (probe.z / 100) + "]\n";
+            string += "\t" + probe.name + ": [" + (x / 100) + "," + (y / 100) + "," + (probe.z / 100) + "]\n";
         });
     });
     string += "roomplans: \n";
     obj.roomplans.forEach(obj => {
         string += "\t- name: " + obj.name + "\n";
-        string += "\t\ty1: " + (obj.y1 / 100) + "\n";
-        string += "\t\tx1: " + (obj.x1 / 100) + "\n";
-        string += "\t\ty2: " + (obj.y2 / 100) + "\n";
-        string += "\t\tx2: " + (obj.x2 / 100) + "\n";
+        string += "\t&nbsp;&nbsp;y1: " + (obj.y1 / 100) + "\n";
+        string += "\t&nbsp;&nbsp;x1: " + (obj.x1 / 100) + "\n";
+        string += "\t&nbsp;&nbsp;y2: " + (obj.y2 / 100) + "\n";
+        string += "\t&nbsp;&nbsp;x2: " + (obj.x2 / 100) + "\n";
     });
     return string;
 }
@@ -596,6 +597,7 @@ function openProbeModal(id, probeId) {
     var modal = document.querySelector(".probe-modal");
     var x = (Math.abs(probe.x - firstCoordinateOffsetX));
     var y = (Math.abs(probe.y - firstCoordinateOffsetY));
+    modal.querySelector(".probe-name").value = probe.name;
     modal.querySelector(".probe-x").value = x;
     modal.querySelector(".probe-y").value = y;
     modal.querySelector(".probe-z").value = probe.z ? probe.z : 0;
@@ -624,12 +626,14 @@ function saveProbe() {
     var valueZ = document.querySelector(".probe-z").value;
     var coverageValue = document.querySelector(".coverage").value;
     var coverageColor = document.querySelector(".coverage-color").value + "40";
+    var name = document.querySelector(".probe-name").value;
     var data = getRooms();
     var room = data.rooms.find(x => x.id == activeProbeModalData.roomId);
     var probe = room.probes.find(x => x.id == activeProbeModalData.probe.id);
     probe.z = parseInt(valueZ);
     probe.coverage = coverageValue;
     probe.color = coverageColor;
+    probe.name = name;
     setRooms(data);
     closeModal(".probe-modal");
     render(null, false);

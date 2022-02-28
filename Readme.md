@@ -15,6 +15,10 @@ This project is a work in progress.
 - copy generated code over to ESPresenseIPS app.js file
 
 ## Changes
+28-02-2022
+- Fix indentation on yaml export   
+- Add name to esp32 devices. The name is exported in the yaml.   
+
 27-02-2022
 - Show arrow indicators on top, left, bottom and right of canvas if floorplan is out of screen to indicate on which side/s it is
 
@@ -51,7 +55,8 @@ This project is a work in progress.
 [✓] Ability to add esp32 in rooms and position them with precision.  
 [✓] Export esp32 position from rooms to ESPresenseIPS yaml format.  
 [✓] Have each esp32 bluetooth signal radius visible on plan to make sure you have at least 3 signals in each rooms. (will help determine where is the best place to put them ;)).  
-[✓] MQTT client to show devices on the floorplan directly.   
+[✓] MQTT client to show devices on the floorplan directly.  
+[✓] Fix indentation in Yaml 
 [  ] Allow changing the precision while dragging/creating a room.    
 [  ] Code refactoring, add comments.
 
