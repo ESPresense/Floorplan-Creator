@@ -1,6 +1,6 @@
 # FloorPlan creator for ESPresenseIPS
 
-This project has been created to make it easier to create floorplan for ESPresenseIPS by having a gui.
+This project has been created to make it easier to create floorplan for ESPresenseIPS (https://github.com/ESPresense/ad-espresense-ips) by having a gui.
 It offers snap to rooms for easy alignement, gives you mesures on each side of your cursor when on a wall.
 This application is developped in HTML/JS/CSS, no libraries (but fontawesome on a cdn), Canvas power !
 
@@ -61,9 +61,12 @@ This project is a work in progress.
 [✓] Ability to add esp32 in rooms and position them with precision.  
 [✓] Export esp32 position from rooms to ESPresenseIPS yaml format.  
 [✓] Have each esp32 bluetooth signal radius visible on plan to make sure you have at least 3 signals in each rooms. (will help determine where is the best place to put them ;)).  
-[✓] MQTT client to show devices on the floorplan directly.  
+[✓] MQTT client to show devices on the floorplan directly.   
+[  ] Allow changing the precision while dragging/creating a room.   
+[  ] SSL for MQTT (to be able to host the app on home assistant www folder on https instances)    
+[  ] Left toolbar with values modifiers to allow a user to customize snap thresholds and precision and more  
 [✓] Fix indentation in Yaml    
-[  ] Allow changing the precision while dragging/creating a room.    
+[  ] Allow changing the precision while dragging/creating a room.     
 [  ] Code refactoring, add comments.
 
 ## Technical
