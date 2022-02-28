@@ -22,8 +22,11 @@ This project is a work in progress.
 
 ## Changes
 28-02-2022
-- Fix indentation on yaml export   
-- Add name to esp32 devices. The name is exported in the yaml.   
+- New tools menu on the left   
+- New label toggle to hide/show plan labels (room title and meusres)   
+- New file structure (the project was not supposed to grow this much)   
+- Fix indentation on yaml export      
+- Add name to esp32 devices. The name is exported in the yaml     
 
 27-02-2022
 - Show arrow indicators on top, left, bottom and right of canvas if floorplan is out of screen to indicate on which side/s it is
@@ -64,6 +67,7 @@ This project is a work in progress.
 [✓] MQTT client to show devices on the floorplan directly.   
 [  ] Allow changing the precision while dragging/creating a room.   
 [  ] SSL for MQTT (to be able to host the app on home assistant www folder on https instances)    
+[✓] Left toolbar  
 [  ] Left toolbar with values modifiers to allow a user to customize snap thresholds and precision and more  
 [✓] Fix indentation in Yaml    
 [  ] Allow changing the precision while dragging/creating a room.     
