@@ -6,6 +6,11 @@ This application is developped in HTML/JS/CSS, no libraries (but fontawesome on 
 
 This project is a work in progress.
 
+## Demo & online floorplan creator
+You can now try the app on : https://stan69b.github.io/ESPresenseIPS-Floorplan-Creator/
+You will be able to draw you plans, test the app and generate exports.
+Mqtt integration should work but with a public instance of mqtt in https. (the ssl mqtt is partialy implemented, still need some tweaking)
+
 ## How to use
 - Download the project
 - open "index.html" with a browser
