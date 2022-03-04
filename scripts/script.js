@@ -1159,7 +1159,7 @@ function upsertDevice(objectMsg) {
 
 function MQTTconnect() {
     if (mqtt) {
-        mqtt.disconnect();
+        try{ mqtt.disconnect(); } catch {}
     }
     console.log("connecting to " + mqttInitData.host + " on port " + mqttInitData.port);
     mqtt = new Paho.MQTT.Client(mqttInitData.host, mqttInitData.port, "clientjs");
@@ -1169,7 +1169,7 @@ function MQTTconnect() {
         userName: mqttInitData.username,
         password: mqttInitData.password,
         onFailure: onFailure,
-
+        useSSL: true
     };
     mqtt.onMessageArrived = onMessageArrived;
     mqtt.connect(options);
@@ -1206,10 +1206,10 @@ function connectMQTT() {
     mqttInitData.topic = document.querySelector(".mqtt-settings .topic").value;
     mqttInitData.username = document.querySelector(".mqtt-settings .username").value;
     mqttInitData.password = document.querySelector(".mqtt-settings .password").value;
-
+    
     console.log("password", mqttInitData.password);
 
-    if (mqttInitData.host && mqttInitData.username && mqttInitData.password && mqttInitData.port && mqttInitData.topic) {
+    if (mqttInitData.host && mqttInitData.port && mqttInitData.topic) {
         MQTTconnect();
     }
 }
