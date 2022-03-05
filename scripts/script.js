@@ -198,7 +198,6 @@ function render(hightlightId = null, renderButtons = true) {
                     mqttKeys.forEach(key => {
                         var deviceRoot = devices[key];
                         var device = deviceRoot.data;
-                        console.log(deviceRoot);
                         if (!deviceRoot.hidden) {
                             ctxo.beginPath();
                             ctxo.fillStyle = "#ffffff80";
@@ -1181,7 +1180,7 @@ function MQTTconnect() {
         userName: mqttInitData.username,
         password: mqttInitData.password,
         onFailure: onFailure,
-        useSSL: true
+        useSSL: mqttInitData.SSL,
     };
     mqtt.onMessageArrived = onMessageArrived;
     mqtt.connect(options);
@@ -1218,8 +1217,7 @@ function connectMQTT() {
     mqttInitData.topic = document.querySelector(".mqtt-settings .topic").value;
     mqttInitData.username = document.querySelector(".mqtt-settings .username").value;
     mqttInitData.password = document.querySelector(".mqtt-settings .password").value;
-    
-    console.log("password", mqttInitData.password);
+    mqttInitData.SSL = document.querySelector(".mqtt-settings .SSL").checked;
 
     // not checking password to allow anonymous connections
     if (mqttInitData.host && mqttInitData.port && mqttInitData.topic) {
@@ -1234,6 +1232,9 @@ function getMqttSettings() {
     }
 
     var settings = JSON.parse(stringSettings);
+    if (settings.SSL === undefined) {
+        settings.SSL = false;
+    }
     return settings;
 }
 
@@ -1375,7 +1376,7 @@ document.querySelector(".yaml-data").addEventListener("keyup", event => {
         rooms: []
     }
 
-    console.log(floorplanRooms);
+    //console.log(floorplanRooms);
     floorplanRooms.forEach((room, roomIndex) => {
         var data = room.split("\n");
         var roomName = "";
@@ -1461,7 +1462,7 @@ document.querySelector(".yaml-data").addEventListener("keyup", event => {
     });
     convertedYAMLJSON = storageDataConvert;
     document.querySelector(".json-data").value = JSON.stringify(convertedYAMLJSON);
-    console.log(storageDataConvert);
+    //console.log(storageDataConvert);
 });
 
 function saveConvertedData() {

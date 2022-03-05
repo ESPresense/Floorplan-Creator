@@ -250,7 +250,7 @@ button#probe.active {
     display: flex;
     flex-direction: column;
     border-radius: 3px;
-    max-height: 282px;
+    max-height: 333px;
     overflow-y: auto;
 }
 
