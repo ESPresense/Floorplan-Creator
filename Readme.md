@@ -9,7 +9,9 @@ This project is a work in progress.
 ## Demo & online floorplan creator
 You can now try the app on : https://stan69b.github.io/ESPresenseIPS-Floorplan-Creator/
 You will be able to draw you plans, test the app and generate exports.
-Mqtt integration should work but with a public instance of mqtt in https. (the ssl mqtt is partialy implemented, still need some tweaking)
+Mqtt integration should work but with a public instance of mqtt in https. (the ssl mqtt is now implemented)
+Though this demo is not intended for everyday use but rather a quick way to create a floorplan. The MQTT feature is intended for local user executing this app on your own server.  
+I do not know GitHub policy on the traffic allowed on those free project pages.
 
 ## How to use
 - Download the project
@@ -26,6 +28,14 @@ Mqtt integration should work but with a public instance of mqtt in https. (the s
     - enjoy tweaking everything to make it perfect
 
 ## Changes
+05-03-2022
+- Make MQTT allow anonymous connections - Thanks @DTTerastar
+- Catch MQTT disconnection exeptions to prevent javascript execution from breaking - Thanks @DTTerastar
+- SSL implemented in the MQTT client - Thanks @DTTerastar
+- SSL configurable from settings panel
+- Hide/Show devices on the floorplan via MQTT Settings panel
+- Change devices color on the floorplan via MQTT Settings panel
+
 28-02-2022
 - New tools menu on the left   
 - New label toggle to hide/show plan labels (room title and meusres)   
@@ -171,7 +181,7 @@ roomplans:
         x2: 10.53
 ```
 
-## A little glimps
+## A little glimps (Outdated but I can't take new ones currently - Check demo to see new desing and features)
 
 <img width="1918" alt="Screenshot 2022-02-26 at 00 01 42" src="https://user-images.githubusercontent.com/3304418/155815186-3fe68408-f55f-4bed-b310-8d8b059f4660.png">
 
