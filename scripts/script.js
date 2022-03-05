@@ -79,8 +79,6 @@ var convertedYAMLJSON;
 var devices = [];
 var showDevices = false;
 
-var mqttDevicesLatestMessage = {};
-
 var firstCoordinateOffsetX = 0;
 var firstCoordinateOffsetY = 0;
 
@@ -193,14 +191,13 @@ function render(hightlightId = null, renderButtons = true) {
                 });
 
                 if (showDevices) {
-                    var mqttKeys = Object.keys(mqttDevicesLatestMessage);
-                    //console.log("rendring", mqttDevicesLatestMessage);
+                    var mqttKeys = Object.keys(devices);
                     mqttKeys.forEach(key => {
                         var deviceRoot = devices[key];
                         var device = deviceRoot.data;
                         if (!deviceRoot.hidden) {
                             ctxo.beginPath();
-                            ctxo.fillStyle = "#ffffff80";
+                            ctxo.fillStyle = deviceRoot.color ? deviceRoot.color : "#ffffff80";
                             ctxo.arc(device.x + firstCoordinateOffsetX, device.y + firstCoordinateOffsetY, 20, 0, 2 * Math.PI);
                             ctxo.fill();
                             ctxo.closePath();
@@ -731,7 +728,6 @@ function handleScroll(e) {
 
     updateRoomsPosition(scrollOffsetX, scrollOffsetY);
     checkIfAllRoomsOutOfScreen();
-    //updateDevicesPosition(scrollOffsetX, scrollOffsetY);
     render(null, false);
 }
 
@@ -778,16 +774,6 @@ function checkIfAllRoomsOutOfScreen() {
             }
         })
     }
-}
-
-function updateDevicesPosition(scrollOffsetX, scrollOffsetY) {
-    var mqttKeys = Object.keys(mqttDevicesLatestMessage);
-    //console.log("rendring", mqttDevicesLatestMessage);
-    mqttKeys.forEach(key => {
-        var device = mqttDevicesLatestMessage[key];
-        device.x = device.x + scrollOffsetX;
-        device.y = device.y + scrollOffsetY;
-    });
 }
 
 function updateRoomsPosition(scrollOffsetX, scrollOffsetY) {
@@ -1133,39 +1119,42 @@ function onMessageArrived(msg) {
     var objectMsg = JSON.parse(msg.payloadString);
     objectMsg.x = (objectMsg.x * 100);
     objectMsg.y = (objectMsg.y * 100);
-    mqttDevicesLatestMessage[objectMsg.name] = objectMsg;
     upsertDevice(objectMsg);
     render(null, false);
     updateDevicesArray();
 }
 
 function upsertDevice(objectMsg, color = null, hidden = null) {
-    var devicesString = window.localStorage.getItem("devices");
+    if (objectMsg) {
+        var devicesString = window.localStorage.getItem("devices");
 
-    var localDevices = {};
+        var localDevices = {};
 
-    if (devicesString) {
-        localDevices = JSON.parse(devicesString);
+        if (devicesString) {
+            localDevices = JSON.parse(devicesString);
+        }
+        //console.log("1", localDevices[objectMsg.name]);
+        if (localDevices[objectMsg.name]) {
+            localDevices[objectMsg.name].data = objectMsg;
+            if (hidden !== null) {
+                localDevices[objectMsg.name].hidden = hidden;
+            }
+            if (color !== null) {
+                localDevices[objectMsg.name].color = color;
+            }
+        } else {
+            console.log("creating new device");
+            localDevices[objectMsg.name] = {
+                data: objectMsg,
+                color: color ? color : "#ffffff80",
+                hidden: hidden ? hidden : false,
+                id: uuidv4(),
+            }
+        }
+        //console.log("2", localDevices[objectMsg.name]);
+        devices = localDevices;
+        window.localStorage.setItem("devices", JSON.stringify(localDevices));
     }
-    if (localDevices[objectMsg.name]) {
-        localDevices[objectMsg.name].data = objectMsg;
-        if (color !== null) {
-            localDevices[objectMsg.name].color = color;
-        }
-        if (hidden !== null) {
-            localDevices[objectMsg.name].hidden = hidden;
-        }
-    } else {
-        localDevices[objectMsg.name] = {
-            data: objectMsg,
-            color: color ? color : "#ffffff80",
-            hidden: hidden ? hidden : false,
-            id: uuidv4(),
-        }
-    }
-
-    devices = localDevices;
-    window.localStorage.setItem("devices", JSON.stringify(localDevices));
 }
 
 function MQTTconnect() {
@@ -1247,6 +1236,7 @@ function devicesSettings() {
     modal.querySelector(".topic").value = mqttInitData.topic;
     modal.querySelector(".username").value = mqttInitData.username;
     modal.querySelector(".password").value = mqttInitData.password;
+    modal.querySelector(".SSL").value = mqttInitData.SSL;
     //modal.querySelector(".coverage-color").value = probe.color.slice(0, -2);
 
     updateDevicesArray();
@@ -1283,10 +1273,7 @@ function updateDevicesArray() {
                 if (color.value + "80" != device.color) {
                     color.value = device.color
                 }
-
-                if (hidden.checked != device.hidden) {
-                    hidden.checked = device.hidden;
-                }
+                hidden.checked = device.hidden;
             });
 
             nonExistingElements.forEach(device => {
@@ -1299,6 +1286,14 @@ function updateDevicesArray() {
                 var input = document.createElement("input");
                 input.type = "color";
                 input.value = device.color.slice(0, -2);
+                input.setAttribute("data-device", device.id);
+                input.addEventListener("change", (e) => {
+                    var elem = e.target;
+                    var deviceObj = getDeviceById(elem.getAttribute("data-device"));
+                    upsertDevice(deviceObj.data, elem.value+"80");
+                    render(null, false);
+                    updateDevicesArray();
+                });
                 tdColor.append(input);
                 var tdX = document.createElement("td");
                 tdX.innerHTML = Math.round(device.data.x * 10) / 10;
@@ -1314,8 +1309,8 @@ function updateDevicesArray() {
                 checkbox.checked = device.hidden;
                 checkbox.addEventListener("change", (e) => {
                     var elem = e.target;
-                    var deviceObj = getDeviceById(elem.getAttribute("data-device")); 
-                    upsertDevice(deviceObj, null, elem.checked);
+                    var deviceObj = getDeviceById(elem.getAttribute("data-device"));
+                    upsertDevice(deviceObj.data, null, elem.checked);
                     render(null, false);
                     updateDevicesArray();
                 });
