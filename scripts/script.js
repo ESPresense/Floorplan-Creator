@@ -1193,7 +1193,7 @@ if (jsonStorage.rooms.length) {
 
 window.onload = function() {
     mqttInitData = getMqttSettings();
-    if (mqttInitData.host && mqttInitData.username && mqttInitData.password && mqttInitData.port && mqttInitData.topic) {
+    if (mqttInitData.host && mqttInitData.port && mqttInitData.topic) {
         MQTTconnect();
     } else {
         document.querySelector(".hide-show-devices").disabled = true;
