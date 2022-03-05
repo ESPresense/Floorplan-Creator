@@ -196,16 +196,19 @@ function render(hightlightId = null, renderButtons = true) {
                     var mqttKeys = Object.keys(mqttDevicesLatestMessage);
                     //console.log("rendring", mqttDevicesLatestMessage);
                     mqttKeys.forEach(key => {
-                        var device = mqttDevicesLatestMessage[key];
-                        //console.log(device);
-                        ctxo.beginPath();
-                        ctxo.fillStyle = "#ffffff80";
-                        ctxo.arc(device.x + firstCoordinateOffsetX, device.y + firstCoordinateOffsetY, 20, 0, 2 * Math.PI);
-                        ctxo.fill();
-                        ctxo.closePath();
+                        var deviceRoot = devices[key];
+                        var device = deviceRoot.data;
+                        console.log(deviceRoot);
+                        if (!deviceRoot.hidden) {
+                            ctxo.beginPath();
+                            ctxo.fillStyle = "#ffffff80";
+                            ctxo.arc(device.x + firstCoordinateOffsetX, device.y + firstCoordinateOffsetY, 20, 0, 2 * Math.PI);
+                            ctxo.fill();
+                            ctxo.closePath();
 
-                        ctxo.fillStyle = '#ffffff';
-                        ctxo.fillText(device.name, (device.x + firstCoordinateOffsetX), (device.y + firstCoordinateOffsetY) + 35);
+                            ctxo.fillStyle = '#ffffff';
+                            ctxo.fillText(device.name, (device.x + firstCoordinateOffsetX), (device.y + firstCoordinateOffsetY) + 35);
+                        }
                     })
                 }
 
@@ -1137,7 +1140,7 @@ function onMessageArrived(msg) {
     updateDevicesArray();
 }
 
-function upsertDevice(objectMsg) {
+function upsertDevice(objectMsg, color = null, hidden = null) {
     var devicesString = window.localStorage.getItem("devices");
 
     var localDevices = {};
@@ -1147,13 +1150,22 @@ function upsertDevice(objectMsg) {
     }
     if (localDevices[objectMsg.name]) {
         localDevices[objectMsg.name].data = objectMsg;
+        if (color !== null) {
+            localDevices[objectMsg.name].color = color;
+        }
+        if (hidden !== null) {
+            localDevices[objectMsg.name].hidden = hidden;
+        }
     } else {
         localDevices[objectMsg.name] = {
             data: objectMsg,
-            color: "#ffffff80"
+            color: color ? color : "#ffffff80",
+            hidden: hidden ? hidden : false,
+            id: uuidv4(),
         }
     }
 
+    devices = localDevices;
     window.localStorage.setItem("devices", JSON.stringify(localDevices));
 }
 
@@ -1207,8 +1219,6 @@ function connectMQTT() {
     mqttInitData.username = document.querySelector(".mqtt-settings .username").value;
     mqttInitData.password = document.querySelector(".mqtt-settings .password").value;
 
-    console.log("password", mqttInitData.password);
-
     if (mqttInitData.host && mqttInitData.username && mqttInitData.password && mqttInitData.port && mqttInitData.topic) {
         MQTTconnect();
     }
@@ -1247,34 +1257,85 @@ function updateDevicesArray() {
         var devicesString = window.localStorage.getItem("devices");
         var devices = JSON.parse(devicesString);
         if (devices) {
-            body.innerHTML = "";
-            Object.keys(devices).forEach(deviceName => {
-                var tr = document.createElement("tr");
+            var trs = [...body.querySelectorAll("tr")];
+            var existingElementsId = trs.length ? trs.map(t => t.getAttribute("data-deviceId")) : [];
+            
+            var existingElements = Object.values(devices).filter(x => existingElementsId.includes(x.id));
+            var nonExistingElements = Object.values(devices).filter(x => !existingElementsId.includes(x.id));
 
+            existingElements.forEach(device => {
+                var deviceName = device.data.name;
+                var tr = body.querySelector("[data-deviceId='"+ device.id +"']");
+                var name = tr.children[0];
+                var color = tr.children[1];
+                var x = tr.children[2];
+                var y = tr.children[3];
+                var z = tr.children[4];
+                var hidden = tr.children[5];
+                name.innerHTML = deviceName;
+                x.innerHTML = Math.round(device.data.x * 10) / 10;
+                y.innerHTML = Math.round(device.data.y * 10) / 10;
+                z.innerHTML = Math.round(device.data.z * 10) / 10;
+                if (color.value + "80" != device.color) {
+                    color.value = device.color
+                }
+
+                if (hidden.checked != device.hidden) {
+                    hidden.checked = device.hidden;
+                }
+            });
+
+            nonExistingElements.forEach(device => {
+                var deviceName = device.data.name;
+                var tr = document.createElement("tr");
+                tr.setAttribute("data-deviceId", device.id);
                 var tdName = document.createElement("td");
                 tdName.innerHTML = deviceName;
                 var tdColor = document.createElement("td");
                 var input = document.createElement("input");
                 input.type = "color";
-                input.value = devices[deviceName].color.slice(0, -2);
+                input.value = device.color.slice(0, -2);
                 tdColor.append(input);
                 var tdX = document.createElement("td");
-                tdX.innerHTML = Math.round(devices[deviceName].data.x * 10) / 10;
+                tdX.innerHTML = Math.round(device.data.x * 10) / 10;
                 var tdY = document.createElement("td");
-                tdY.innerHTML = Math.round(devices[deviceName].data.y * 10) / 10;
+                tdY.innerHTML = Math.round(device.data.y * 10) / 10;
                 var tdZ = document.createElement("td");
-                tdZ.innerHTML = Math.round(devices[deviceName].data.z * 10) / 10;
+                tdZ.innerHTML = Math.round(device.data.z * 10) / 10;
+                var tdHide = document.createElement("td");
+                var checkbox = document.createElement("input");
+                checkbox.classList.add("deviceCheckbox");
+                checkbox.setAttribute("data-device", device.id);
+                checkbox.type = "checkbox";
+                checkbox.checked = device.hidden;
+                checkbox.addEventListener("change", (e) => {
+                    var elem = e.target;
+                    var deviceObj = getDeviceById(elem.getAttribute("data-device")); 
+                    upsertDevice(deviceObj, null, elem.checked);
+                    render(null, false);
+                    updateDevicesArray();
+                });
+                tdHide.append(checkbox);
 
                 tr.append(tdName);
                 tr.append(tdColor);
                 tr.append(tdX);
                 tr.append(tdY);
                 tr.append(tdZ);
+                tr.append(tdHide);
 
                 body.append(tr);
             })
         }
     }
+}
+
+function getDeviceById(id) {
+    var key = Object.keys(devices).find(x => {
+        return devices[x].id == id;
+    });
+
+    return devices[key];
 }
 
 function saveMqtt() {
@@ -1398,7 +1459,6 @@ document.querySelector(".yaml-data").addEventListener("keyup", event => {
     convertedYAMLJSON = storageDataConvert;
     document.querySelector(".json-data").value = JSON.stringify(convertedYAMLJSON);
     console.log(storageDataConvert);
-    // Will overight localstorage rooms with result of conversion of uncommenting
 });
 
 function saveConvertedData() {
