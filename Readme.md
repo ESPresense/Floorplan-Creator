@@ -7,7 +7,7 @@ This application is developped in HTML/JS/CSS, no libraries (but fontawesome on 
 This project is a work in progress.
 
 ## Demo & online floorplan creator
-You can now try the app on : https://stan69b.github.io/ESPresenseIPS-Floorplan-Creator/
+You can now try the app on : https://espresense.com/Floorplan-Creator/   
 You will be able to draw you plans, test the app and generate exports.
 Mqtt integration should work but with a public instance of mqtt in https. (the ssl mqtt is now implemented)
 Though this demo is not intended for everyday use but rather a quick way to create a floorplan. The MQTT feature is intended for local user executing this app on your own server.  
@@ -84,8 +84,7 @@ I do not know GitHub policy on the traffic allowed on those free project pages.
 [  ] SSL for MQTT (to be able to host the app on home assistant www folder on https instances)    
 [✓] Left toolbar  
 [  ] Left toolbar with values modifiers to allow a user to customize snap thresholds and precision and more  
-[✓] Fix indentation in Yaml    
-[  ] Allow changing the precision while dragging/creating a room.     
+[✓] Fix indentation in Yaml       
 [  ] Code refactoring, add comments.
 
 ## Technical
