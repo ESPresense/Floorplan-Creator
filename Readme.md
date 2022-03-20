@@ -81,7 +81,7 @@ I do not know GitHub policy on the traffic allowed on those free project pages.
 [✓] Have each esp32 bluetooth signal radius visible on plan to make sure you have at least 3 signals in each rooms. (will help determine where is the best place to put them ;)).  
 [✓] MQTT client to show devices on the floorplan directly.   
 [  ] Allow changing the precision while dragging/creating a room.   
-[  ] SSL for MQTT (to be able to host the app on home assistant www folder on https instances)    
+[✓] SSL for MQTT (to be able to host the app on home assistant www folder on https instances)    
 [✓] Left toolbar  
 [  ] Left toolbar with values modifiers to allow a user to customize snap thresholds and precision and more  
 [✓] Fix indentation in Yaml       
