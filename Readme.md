@@ -28,6 +28,14 @@ I do not know GitHub policy on the traffic allowed on those free project pages.
     - enjoy tweaking everything to make it perfect
 
 ## Changes
+21-03-2022
+- Added unit selector, when selecting feet, values will be converted to meters before Yaml export.
+- You can toggle unit on an already drawn plan
+- App used to save unit in the localstorage, it is now a variable.
+- If you update you will see unit on plan and right elements as mm and mft (because old "m" unit is in the label and I append the new variable unit)
+- Just a UI bug, will work as expected
+- You can manually remove the "m" from room labels in the localstorage if it bothers you.
+
 05-03-2022
 - Make MQTT allow anonymous connections - Thanks @DTTerastar
 - Catch MQTT disconnection exeptions to prevent javascript execution from breaking - Thanks @DTTerastar

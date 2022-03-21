@@ -74,6 +74,12 @@ var mqttInitData = {
     password: ""
 }
 
+var savedUnit = window.localStorage.getItem("unit");
+var currentUnit = savedUnit ?? "m";
+var btn = document.querySelector(".unit-btn");
+var label = btn.querySelector(".txt-icn");
+label.innerHTML = currentUnit;
+
 var convertedYAMLJSON;
 
 var devices = [];
@@ -172,8 +178,8 @@ function render(hightlightId = null, renderButtons = true) {
                     if (!probeMode) {
                         ctxo.fillStyle = '#ffffff';
                         ctxo.fillText(room.name, room.text.width.x, room.text.width.y - 20);
-                        ctxo.fillText(room.text.width.label, room.text.width.x, room.text.width.y);
-                        ctxo.fillText(room.text.height.label, room.text.height.x, room.text.height.y);
+                        ctxo.fillText(room.text.width.label+currentUnit, room.text.width.x, room.text.width.y);
+                        ctxo.fillText(room.text.height.label+currentUnit, room.text.height.x, room.text.height.y);
                     }
                 }
 
@@ -365,7 +371,12 @@ function setRooms(data) {
 // export rooms data to an ESPresenseIPS yaml format
 function exportToYaml() {
     var jsonStorage = getRooms();
-
+    var infoTxt = document.querySelector(".info-ft");
+    if (currentUnit == "m") {
+        infoTxt.hidden = true;
+    } else {
+        infoTxt.hidden = false;
+    }
     //get most left x value
     if (jsonStorage.rooms.length) {
         var mostLeftRoom = jsonStorage.rooms.reduce(function(prev, curr) {
@@ -390,12 +401,16 @@ function exportToYaml() {
             // second coordinat is (room x minus firstCoordinateOffsetX) plus room width, (room y minus firstCoordinateOffsetY) plus room height
             //console.log(room.id, "x: " + (room.zone.x - firstCoordinateOffsetX) + ", y: " + (room.zone.y - firstCoordinateOffsetY));
             //console.log(room.id, "x: " + ((room.zone.x - firstCoordinateOffsetX) + room.zone.width) + ", y: " + ((room.zone.y - firstCoordinateOffsetY) + room.zone.height));
+            var y1 = currentUnit == "m" ? Math.abs(room.zone.y - firstCoordinateOffsetY) : Math.abs(room.zone.y - firstCoordinateOffsetY)*3.2808;
+            var x1 = currentUnit == "m" ? Math.abs(room.zone.x - firstCoordinateOffsetX) : Math.abs(room.zone.x - firstCoordinateOffsetX)*3.2808;
+            var y2 = currentUnit == "m" ? Math.abs((room.zone.y - firstCoordinateOffsetY) + room.zone.height) : Math.abs((room.zone.y - firstCoordinateOffsetY) + room.zone.height)*3.2808;
+            var x2 = currentUnit == "m" ? Math.abs((room.zone.x - firstCoordinateOffsetX) + room.zone.width) : Math.abs((room.zone.x - firstCoordinateOffsetX) + room.zone.width)*3.2808;
             var objRoom = {
                 name: room.name ? room.name : "Room" + room.id,
-                y1: Math.abs(room.zone.y - firstCoordinateOffsetY),
-                x1: Math.abs(room.zone.x - firstCoordinateOffsetX),
-                y2: Math.abs((room.zone.y - firstCoordinateOffsetY) + room.zone.height),
-                x2: Math.abs((room.zone.x - firstCoordinateOffsetX) + room.zone.width),
+                y1,
+                x1,
+                y2,
+                x2,
             }
             data.roomplans.push(objRoom);
         })
@@ -486,12 +501,12 @@ function handleMouseUp(e) {
                 },
                 text: {
                     width: {
-                        label: 'width : ' + Math.abs(prevWidth / 100) + 'm',
+                        label: 'width : ' + Math.abs(prevWidth / 100),
                         x: (prevStartX + (prevWidth / 2)),
                         y: (prevStartY + (prevHeight / 2)) - 10,
                     },
                     height: {
-                        label: 'height : ' + Math.abs(prevHeight / 100) + 'm',
+                        label: 'height : ' + Math.abs(prevHeight / 100),
                         x: (prevStartX + (prevWidth / 2)),
                         y: (prevStartY + (prevHeight / 2)) + 10,
                     }
@@ -687,8 +702,8 @@ function addRoomItemToList(id, room) {
     }
     storageRoom.querySelector(".label").innerHTML = room.name ? room.name : "[" + id + "] Room";
     var mesures = storageRoom.querySelector(".mesures");
-    mesures.querySelector(".width").innerHTML = room.text.width.label;
-    mesures.querySelector(".height").innerHTML = room.text.height.label;
+    mesures.querySelector(".width").innerHTML = room.text.width.label + currentUnit;
+    mesures.querySelector(".height").innerHTML = room.text.height.label + currentUnit;
     var buttonMore = storageRoom.querySelector("button#more");
     buttonMore.onclick = function() {
         roomInfo(id);
@@ -829,7 +844,7 @@ function handleMouseMove(e) {
                     ctx.lineTo(room.zone.x - 15, pos.y);
                     ctx.stroke();
                     ctx.closePath();
-                    addText(room.zone.x - 50, room.zone.y, 1, (pos.y - room.zone.y), ((pos.y - room.zone.y) / 100) + "m", "right");
+                    addText(room.zone.x - 50, room.zone.y, 1, (pos.y - room.zone.y), ((pos.y - room.zone.y) / 100) + currentUnit, "right");
 
                     ctx.beginPath();
                     ctx.strokeStyle = "#ffffff";
@@ -843,7 +858,7 @@ function handleMouseMove(e) {
                     ctx.lineTo(room.zone.x - 15, pos.y);
                     ctx.stroke();
                     ctx.closePath();
-                    addText(room.zone.x - 50, pos.y, 1, ((room.zone.y + room.zone.height) - pos.y), (((room.zone.y + room.zone.height) - pos.y) / 100) + "m", "right");
+                    addText(room.zone.x - 50, pos.y, 1, ((room.zone.y + room.zone.height) - pos.y), (((room.zone.y + room.zone.height) - pos.y) / 100) + currentUnit, "right");
                 }
                 cursorPositionX = room.zone.x;
             } else if (
@@ -857,7 +872,7 @@ function handleMouseMove(e) {
                     ctx.lineTo((room.zone.x + room.zone.width) + 15, pos.y);
                     ctx.stroke();
                     ctx.closePath();
-                    addText((room.zone.x + room.zone.width) + 50, room.zone.y, 1, (pos.y - room.zone.y), ((pos.y - room.zone.y) / 100) + "m", "left");
+                    addText((room.zone.x + room.zone.width) + 50, room.zone.y, 1, (pos.y - room.zone.y), ((pos.y - room.zone.y) / 100) + currentUnit, "left");
 
                     ctx.beginPath();
                     ctx.strokeStyle = "#ffffff";
@@ -872,7 +887,7 @@ function handleMouseMove(e) {
                     ctx.lineTo((room.zone.x + room.zone.width) + 15, pos.y);
                     ctx.stroke();
                     ctx.closePath();
-                    addText((room.zone.x + room.zone.width) + 50, pos.y, 1, ((room.zone.y + room.zone.height) - pos.y), (((room.zone.y + room.zone.height) - pos.y) / 100) + "m", "left");
+                    addText((room.zone.x + room.zone.width) + 50, pos.y, 1, ((room.zone.y + room.zone.height) - pos.y), (((room.zone.y + room.zone.height) - pos.y) / 100) + currentUnit, "left");
                 }
                 cursorPositionX = room.zone.x + room.zone.width;
             } else if (
@@ -886,7 +901,7 @@ function handleMouseMove(e) {
                     ctx.lineTo(pos.x, room.zone.y - 15);
                     ctx.stroke();
                     ctx.closePath();
-                    addText(room.zone.x, room.zone.y - 15, (pos.x - room.zone.x), 1, ((pos.x - room.zone.x) / 100) + "m", "right");
+                    addText(room.zone.x, room.zone.y - 15, (pos.x - room.zone.x), 1, ((pos.x - room.zone.x) / 100) + currentUnit, "right");
 
                     ctx.beginPath();
                     ctx.strokeStyle = "#ffffff";
@@ -901,7 +916,7 @@ function handleMouseMove(e) {
                     ctx.lineTo(pos.x, room.zone.y - 15);
                     ctx.stroke();
                     ctx.closePath();
-                    addText(pos.x, room.zone.y - 15, ((room.zone.x + room.zone.width) - pos.x), 1, ((room.zone.x + room.zone.width) - pos.x) + "m", "right");
+                    addText(pos.x, room.zone.y - 15, ((room.zone.x + room.zone.width) - pos.x), 1, ((room.zone.x + room.zone.width) - pos.x) + currentUnit, "right");
                 }
                 cursorPositionY = room.zone.y;
             } else if (
@@ -915,7 +930,7 @@ function handleMouseMove(e) {
                     ctx.lineTo(pos.x, room.zone.y + room.zone.height + 15);
                     ctx.stroke();
                     ctx.closePath();
-                    addText(room.zone.x, room.zone.y + room.zone.height + 50, (pos.x - room.zone.x), 1, ((pos.x - room.zone.x) / 100) + "m", "right");
+                    addText(room.zone.x, room.zone.y + room.zone.height + 50, (pos.x - room.zone.x), 1, ((pos.x - room.zone.x) / 100) + currentUnit, "right");
 
                     ctx.beginPath();
                     ctx.strokeStyle = "#ffffff";
@@ -930,7 +945,7 @@ function handleMouseMove(e) {
                     ctx.lineTo(pos.x, room.zone.y + room.zone.height + 15);
                     ctx.stroke();
                     ctx.closePath();
-                    addText(pos.x, room.zone.y + room.zone.height + 50, ((room.zone.x + room.zone.width) - pos.x), 1, ((room.zone.x + room.zone.width) - pos.x) + "m", "right");
+                    addText(pos.x, room.zone.y + room.zone.height + 50, ((room.zone.x + room.zone.width) - pos.x), 1, ((room.zone.x + room.zone.width) - pos.x) + currentUnit, "right");
                 }
                 cursorPositionY = room.zone.y + room.zone.height;
             }
@@ -1007,8 +1022,8 @@ function handleMouseMove(e) {
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillStyle = "#ffffff";
-    ctx.fillText('width : ' + Math.abs(width / 100) + 'm', (startX + (width / 2)), (startY + (height / 2)) - 10);
-    ctx.fillText('height : ' + Math.abs(height / 100) + 'm', (startX + (width / 2)), (startY + (height / 2)) + 10);
+    ctx.fillText('width : ' + Math.abs(width / 100) + currentUnit, (startX + (width / 2)), (startY + (height / 2)) - 10);
+    ctx.fillText('height : ' + Math.abs(height / 100) + currentUnit, (startX + (width / 2)), (startY + (height / 2)) + 10);
 
     prevStartX = startX;
     prevStartY = startY;
@@ -1035,13 +1050,13 @@ function drawCrossMesures(positionX, positionY, room, height, width) {
     ctx.fillStyle = "#ffffff";
 
     //right wall
-    ctx.fillText(Math.abs(((room.zone.x + room.zone.width) - positionX) / 100) + 'm', positionX + (((room.zone.x + room.zone.width) - positionX) / 2), positionY - 10);
+    ctx.fillText(Math.abs(((room.zone.x + room.zone.width) - positionX) / 100) + currentUnit, positionX + (((room.zone.x + room.zone.width) - positionX) / 2), positionY - 10);
     //left wall
-    ctx.fillText(Math.abs((positionX - room.zone.x) / 100) + 'm', positionX - (positionX - room.zone.x) / 2, positionY - 10);
+    ctx.fillText(Math.abs((positionX - room.zone.x) / 100) + currentUnit, positionX - (positionX - room.zone.x) / 2, positionY - 10);
     //top wall
-    ctx.fillText(Math.abs((positionY - room.zone.y) / 100) + 'm', positionX - 25, room.zone.y + ((positionY - room.zone.y) / 2));
+    ctx.fillText(Math.abs((positionY - room.zone.y) / 100) + currentUnit, positionX - 25, room.zone.y + ((positionY - room.zone.y) / 2));
     //bottom wall
-    ctx.fillText(Math.abs((positionY - (room.zone.y + room.zone.height)) / 100) + 'm', positionX + 30, positionY + (((room.zone.y + room.zone.height) - positionY) / 2));
+    ctx.fillText(Math.abs((positionY - (room.zone.y + room.zone.height)) / 100) + currentUnit, positionX + 30, positionY + (((room.zone.y + room.zone.height) - positionY) / 2));
 }
 
 function drawCross(positionX, positionY, room, height, width) {
@@ -1122,6 +1137,20 @@ function onMessageArrived(msg) {
     upsertDevice(objectMsg);
     render(null, false);
     updateDevicesArray();
+}
+
+function toggleUnit() {
+    var btn = document.querySelector(".unit-btn");
+    var label = btn.querySelector(".txt-icn");
+    if (currentUnit == "m") {
+        currentUnit = "ft";
+    } else {
+        currentUnit = "m";
+    }
+    label.innerHTML = currentUnit;
+    window.localStorage.setItem("unit", currentUnit);
+    document.querySelector(".rooms").innerHTML = "";
+    render();
 }
 
 function upsertDevice(objectMsg, color = null, hidden = null) {

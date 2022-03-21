@@ -49,6 +49,14 @@
                         <span>Hide/Show Labels</span>
                     </span>
                 </button>
+                <div class="separator"><span></span></div>
+                <button onclick="toggleUnit()" class="tool tooltip unit-btn">
+                    <i class="txt-icn">m</i>
+                    <span class="tooltiptext">
+                        <i class="fas fa-caret-left"></i>
+                        <span>Toggle units (meters/feet)</span>
+                    </span>
+                </button>
             </div>
             <div class="bottom">
                 <button onclick="yamlToJsonEXP()" class="tool tooltip experimental">
@@ -170,6 +178,7 @@
     <div class="modal yaml-export">
         <div class="modal-backdrop"></div>
         <div class="modal-window">
+            <span class="info-ft" hidden>You have selected the feet unit, all values you have generated have been converted to meters in this export (ft = m*3.2808). For this reason, values in this export will not match values displayed in your rooms</span>
             <div class="text">
 
             </div>
