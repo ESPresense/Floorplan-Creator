@@ -389,8 +389,8 @@ function exportToYaml() {
         });
 
         // create an offseter
-        firstCoordinateOffsetY = mostLeftRoom.zone.y;
-        firstCoordinateOffsetX = mostTopRoom.zone.x;
+        firstCoordinateOffsetY = mostTopRoom.zone.y;
+        firstCoordinateOffsetX = mostLeftRoom.zone.x;
 
         var data = {
             rooms: [],
@@ -615,8 +615,8 @@ function openProbeModal(id, probeId) {
         });
 
         // create an offseter
-        firstCoordinateOffsetY = mostLeftRoom.zone.y;
-        firstCoordinateOffsetX = mostTopRoom.zone.x;
+        firstCoordinateOffsetY = mostTopRoom.zone.y;
+        firstCoordinateOffsetX = mostLeftRoom.zone.x;
     }
     activeProbeModalData.roomId = id;
     var room = getRoom(id);
@@ -737,8 +737,8 @@ function handleScroll(e) {
         });
 
         // create an offseter
-        firstCoordinateOffsetY = mostLeftRoom.zone.y;
-        firstCoordinateOffsetX = mostTopRoom.zone.x;
+        firstCoordinateOffsetY = mostTopRoom.zone.y;
+        firstCoordinateOffsetX = mostLeftRoom.zone.x;
     }
 
     updateRoomsPosition(scrollOffsetX, scrollOffsetY);
@@ -1216,8 +1216,8 @@ if (jsonStorage.rooms.length) {
     });
 
     // create an offseter
-    firstCoordinateOffsetY = mostLeftRoom.zone.y;
-    firstCoordinateOffsetX = mostTopRoom.zone.x;
+    firstCoordinateOffsetY = mostTopRoom.zone.y;
+    firstCoordinateOffsetX = mostLeftRoom.zone.x;
 }
 
 window.onload = function() {
