@@ -28,6 +28,9 @@ I do not know GitHub policy on the traffic allowed on those free project pages.
     - enjoy tweaking everything to make it perfect
 
 ## Changes
+05-04-2022
+- Fixed calculation of most top/left room - Thanks @Shuttleu
+
 21-03-2022
 - Added unit selector, when selecting feet, values will be converted to meters before Yaml export.
 - You can toggle unit on an already drawn plan
