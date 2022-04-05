@@ -29,7 +29,7 @@ I do not know GitHub policy on the traffic allowed on those free project pages.
 
 ## Changes
 05-04-2022
-- Fixed calculation of most top/left room - Thanks @Shuttleu
+- Fixed calculation of most top and left rooms (in some cases where most top and left rooms are not the same room) - Thanks @Shuttleu
 
 21-03-2022
 - Added unit selector, when selecting feet, values will be converted to meters before Yaml export.
