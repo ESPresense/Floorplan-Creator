@@ -1,17 +1,10 @@
 # FloorPlan creator for ESPresenseIPS
 
-This project has been created to make it easier to create floorplan for ESPresenseIPS (https://github.com/ESPresense/ad-espresense-ips) by having a gui.
+This project has been created to make it easier to create floorplan for ESPresenseIPS (https://github.com/ESPresense/ESPresense-companion) by having a gui.
 It offers snap to rooms for easy alignement, gives you mesures on each side of your cursor when on a wall.
-This application is developped in HTML/JS/CSS, no libraries (but fontawesome on a cdn), Canvas power !
+This application is developed in HTML/JS/CSS, no libraries (but fontawesome on a cdn), Canvas power !
 
 This project is a work in progress.
-
-## Demo & online floorplan creator
-You can now try the app on : https://espresense.com/Floorplan-Creator/   
-You will be able to draw you plans, test the app and generate exports.
-Mqtt integration should work but with a public instance of mqtt in https. (the ssl mqtt is now implemented)
-Though this demo is not intended for everyday use but rather a quick way to create a floorplan. The MQTT feature is intended for local user executing this app on your own server.  
-I do not know GitHub policy on the traffic allowed on those free project pages.
 
 ## How to use
 - Download the project
@@ -28,6 +21,9 @@ I do not know GitHub policy on the traffic allowed on those free project pages.
     - enjoy tweaking everything to make it perfect
 
 ## Changes
+12-03-2023
+- Modified yaml output to be compatible with https://github.com/ESPresense/ESPresense-companion
+
 05-04-2022
 - Fixed calculation of most top and left rooms (in some cases where most top and left rooms are not the same room) - Thanks @Shuttleu
 

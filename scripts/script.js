@@ -410,7 +410,7 @@ function exportToYaml() {
                 y1,
                 x1,
                 y2,
-                x2,
+                x2
             }
             data.roomplans.push(objRoom);
         })
@@ -458,20 +458,25 @@ function copyYaml() {
 
 function objToYaml(obj) {
     var string = "rooms: \n"
-    obj.rooms.forEach(probesData => {
-        probesData.probes.forEach(probe => {
-            var x = Math.abs(probe.x - firstCoordinateOffsetX);
-            var y = Math.abs(probe.y - firstCoordinateOffsetY);
-            string += "\t" + probe.name + ": [" + (x / 100) + "," + (y / 100) + "," + (probe.z / 100) + "]\n";
-        });
-    });
-    string += "roomplans: \n";
     obj.roomplans.forEach(obj => {
         string += "\t- name: " + obj.name + "\n";
-        string += "\t&nbsp;&nbsp;y1: " + (obj.y1 / 100) + "\n";
-        string += "\t&nbsp;&nbsp;x1: " + (obj.x1 / 100) + "\n";
-        string += "\t&nbsp;&nbsp;y2: " + (obj.y2 / 100) + "\n";
-        string += "\t&nbsp;&nbsp;x2: " + (obj.x2 / 100) + "\n";
+        string += "\t\tpoints:" + "\n";
+        string += "\t\t\t - [ " + Math.round(obj.x1  / 100) + ", " + Math.round(obj.y1  / 100)   +"]\n";
+        string += "\t\t\t - [ " + Math.round(obj.x2  / 100) + ", " + Math.round(obj.y1  / 100)   +"]\n";
+        string += "\t\t\t - [ " + Math.round(obj.x2  / 100) + ", " + Math.round(obj.y2  / 100)   +"]\n";
+        string += "\t\t\t - [ " + Math.round(obj.x1  / 100) + ", " + Math.round(obj.y2  / 100)   +"]\n";
+        string += "\t\t\t - [ " + Math.round(obj.x1  / 100) + ", " + Math.round(obj.y1  / 100)   +"]\n";
+    });
+
+    string += "nodes: \n";
+    obj.rooms.forEach(probesData => {
+        probesData.probes.forEach(probe => {
+            var x = currentUnit == "m" ? Math.abs(probe.x - firstCoordinateOffsetX) : Math.abs(probe.x - firstCoordinateOffsetX)/3.2808;
+            var y =  currentUnit == "m" ? Math.abs(probe.y - firstCoordinateOffsetY) : Math.abs(probe.y - firstCoordinateOffsetY)/3.2808;
+            string += "\t- name: " + probe.name +"\n";
+            string += "\tpoint: [" + + Math.round(x  / 100) + "," + (y / 100) + "," + Math.round(y  / 100) + ", 0]\n";
+            string += "\tfloors: [\"first\"]\n";
+        });
     });
     return string;
 }
@@ -1132,8 +1137,8 @@ function onFailure(msg) {
 
 function onMessageArrived(msg) {
     var objectMsg = JSON.parse(msg.payloadString);
-    objectMsg.x = (objectMsg.x * 100);
-    objectMsg.y = (objectMsg.y * 100);
+    objectMsg.x = (objectMsg.x  / 100);
+    objectMsg.y = (objectMsg.y  / 100);
     upsertDevice(objectMsg);
     render(null, false);
     updateDevicesArray();
@@ -1431,7 +1436,7 @@ document.querySelector(".yaml-data").addEventListener("keyup", event => {
                     if (!tmproom.zone) {
                         tmproom.zone = {};
                     }
-                    tmproom.zone.y = parseFloat(attr.replace("y1:", "").trim()) * 100;
+                    tmproom.zone.y = parseFloat(attr.replace("y1:", "").trim())  / 100;
                 }
             } else if (attr.includes("x1:")) {
                 var tmproom = storageDataConvert.rooms.find(x => x.id == roomId);
@@ -1439,7 +1444,7 @@ document.querySelector(".yaml-data").addEventListener("keyup", event => {
                     if (!tmproom.zone) {
                         tmproom.zone = {};
                     }
-                    tmproom.zone.x = parseFloat(attr.replace("x1:", "").trim()) * 100;
+                    tmproom.zone.x = parseFloat(attr.replace("x1:", "").trim())  / 100;
                 }
             } else if (attr.includes("y2:")) {
                 var tmproom = storageDataConvert.rooms.find(x => x.id == roomId);
@@ -1448,7 +1453,7 @@ document.querySelector(".yaml-data").addEventListener("keyup", event => {
                     if (!tmproom.zone) {
                         tmproom.zone = {};
                     }
-                    tmproom.zone.height = (parseFloat(attr.replace("y2:", "").trim()) - parseFloat(yValue.replace("y1:", "").trim())) * 100;
+                    tmproom.zone.height = (parseFloat(attr.replace("y2:", "").trim()) - parseFloat(yValue.replace("y1:", "").trim()))  / 100;
                 }
             } else if (attr.includes("x2:")) {
                 var tmproom = storageDataConvert.rooms.find(x => x.id == roomId);
@@ -1457,7 +1462,7 @@ document.querySelector(".yaml-data").addEventListener("keyup", event => {
                     if (!tmproom.zone) {
                         tmproom.zone = {};
                     }
-                    tmproom.zone.width = (parseFloat(attr.replace("x2:", "").trim()) - parseFloat(xValue.replace("x1:", "").trim())) * 100;
+                    tmproom.zone.width = (parseFloat(attr.replace("x2:", "").trim()) - parseFloat(xValue.replace("x1:", "").trim()))  / 100;
                 }
             }
         });
@@ -1475,9 +1480,9 @@ document.querySelector(".yaml-data").addEventListener("keyup", event => {
                     id: uuidv4(),
                     color: "#ffffff40",
                     coverage: 500,
-                    x: value[0] * 100,
-                    y: value[1] * 100,
-                    z: value[2] * 100,
+                    x: value[0]  / 100,
+                    y: value[1]  / 100,
+                    z: value[2]  / 100,
                     width: 5,
                     height: 15
                 });
