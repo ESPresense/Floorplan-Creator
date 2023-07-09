@@ -4,7 +4,10 @@ This project has been created to make it easier to create floorplan for ESPresen
 It offers snap to rooms for easy alignement, gives you mesures on each side of your cursor when on a wall.
 This application is developed in HTML/JS/CSS, no libraries (but fontawesome on a cdn), Canvas power !
 
-This project is a work in progress.
+## Demo & online floorplan creator
+You can now try the app on : https://espresense.com/Floorplan-Creator/   
+You will be able to draw you plans, test the app and generate exports.
+Mqtt integration should work but with a public instance of mqtt in https. (the ssl mqtt is now implemented)
 
 ## How to use
 - Download the project
