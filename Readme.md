@@ -1,6 +1,6 @@
 # FloorPlan creator for ESPresenseIPS
 
-This project has been created to make it easier to create floorplan for ESPresenseIPS (https://github.com/ESPresense/ESPresense-companion) by having a gui.
+This project has been created to make it easier to create floorplan for ESPresenseIPS (https://github.com/ESPresense/ad-espresense-ips) or ESPresense-companion (https://github.com/ESPresense/ESPresense-companion) by having a gui.
 It offers snap to rooms for easy alignement, gives you mesures on each side of your cursor when on a wall.
 This application is developed in HTML/JS/CSS, no libraries (but fontawesome on a cdn), Canvas power !
 
