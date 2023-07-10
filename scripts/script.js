@@ -461,11 +461,11 @@ function objToYaml(obj) {
     obj.roomplans.forEach(obj => {
         string += "\t- name: " + obj.name + "\n";
         string += "\t\tpoints:" + "\n";
-        string += "\t\t\t - [ " + Math.round(obj.x1  / 100) + ", " + Math.round(obj.y1  / 100)   +"]\n";
-        string += "\t\t\t - [ " + Math.round(obj.x2  / 100) + ", " + Math.round(obj.y1  / 100)   +"]\n";
-        string += "\t\t\t - [ " + Math.round(obj.x2  / 100) + ", " + Math.round(obj.y2  / 100)   +"]\n";
-        string += "\t\t\t - [ " + Math.round(obj.x1  / 100) + ", " + Math.round(obj.y2  / 100)   +"]\n";
-        string += "\t\t\t - [ " + Math.round(obj.x1  / 100) + ", " + Math.round(obj.y1  / 100)   +"]\n";
+        string += "\t\t\t - [ " + (Math.round(obj.x1)/100) + ", " + (Math.round(obj.y1)/100)   +"]\n";
+        string += "\t\t\t - [ " + (Math.round(obj.x2)/100) + ", " + (Math.round(obj.y1)/100)   +"]\n";
+        string += "\t\t\t - [ " + (Math.round(obj.x2)/100) + ", " + (Math.round(obj.y2)/100)   +"]\n";
+        string += "\t\t\t - [ " + (Math.round(obj.x1)/100) + ", " + (Math.round(obj.y2)/100)   +"]\n";
+        string += "\t\t\t - [ " + (Math.round(obj.x1)/100) + ", " + (Math.round(obj.y1)/100)   +"]\n";
     });
 
     string += "nodes: \n";
@@ -474,7 +474,7 @@ function objToYaml(obj) {
             var x = currentUnit == "m" ? Math.abs(probe.x - firstCoordinateOffsetX) : Math.abs(probe.x - firstCoordinateOffsetX)/3.2808;
             var y =  currentUnit == "m" ? Math.abs(probe.y - firstCoordinateOffsetY) : Math.abs(probe.y - firstCoordinateOffsetY)/3.2808;
             string += "\t- name: " + probe.name +"\n";
-            string += "\tpoint: [" + + Math.round(x  / 100) + "," + (y / 100) + "," + Math.round(y  / 100) + ", 0]\n";
+            string += "\tpoint: [" + (Math.round(x)/100) + "," + (Math.round(y) / 100) + ", 0]\n";
             string += "\tfloors: [\"first\"]\n";
         });
     });
