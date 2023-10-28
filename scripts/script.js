@@ -384,12 +384,12 @@ function exportToYaml() {
         });
 
         // get highest y value
-        var mostTopRoom = jsonStorage.rooms.reduce(function(prev, curr) {
-            return prev.zone.y <= curr.zone.y ? prev : curr;
+        var mostBottomRoom = jsonStorage.rooms.reduce(function(prev, curr) {
+            return (prev.zone.y + prev.zone.height) >= (curr.zone.y + curr.zone.height) ? prev : curr;
         });
 
         // create an offseter
-        firstCoordinateOffsetY = mostTopRoom.zone.y;
+        firstCoordinateOffsetY = mostBottomRoom.zone.y + mostBottomRoom.zone.height;
         firstCoordinateOffsetX = mostLeftRoom.zone.x;
 
         var data = {
