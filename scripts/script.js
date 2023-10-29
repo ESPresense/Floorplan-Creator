@@ -384,12 +384,12 @@ function exportToYaml() {
         });
 
         // get highest y value
-        var mostTopRoom = jsonStorage.rooms.reduce(function(prev, curr) {
-            return prev.zone.y <= curr.zone.y ? prev : curr;
+        var mostBottomRoom = jsonStorage.rooms.reduce(function(prev, curr) {
+            return (prev.zone.y + prev.zone.height) >= (curr.zone.y + curr.zone.height) ? prev : curr;
         });
 
         // create an offseter
-        firstCoordinateOffsetY = mostTopRoom.zone.y;
+        firstCoordinateOffsetY = mostBottomRoom.zone.y + mostBottomRoom.zone.height;
         firstCoordinateOffsetX = mostLeftRoom.zone.x;
 
         var data = {
@@ -430,7 +430,7 @@ function exportToYaml() {
 
         exportedValue = objToYaml(data);
         var modal = document.querySelector(".yaml-export");
-        modal.querySelector(".text").innerHTML = exportedValue.replaceAll("\n", "<br />").replaceAll("\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
+        modal.querySelector(".text").innerHTML = exportedValue.replaceAll("\n", "<br />").replaceAll("\t", "&nbsp;&nbsp;");
         modal.classList.add("visible");
         console.log(exportedValue);
     }
@@ -453,7 +453,7 @@ function closeModal(id) {
 }
 
 function copyYaml() {
-    navigator.clipboard.writeText(exportedValue);
+    navigator.clipboard.writeText(exportedValue.replaceAll("\t", "  "));
 }
 
 function objToYaml(obj) {
@@ -461,11 +461,11 @@ function objToYaml(obj) {
     obj.roomplans.forEach(obj => {
         string += "\t- name: " + obj.name + "\n";
         string += "\t\tpoints:" + "\n";
-        string += "\t\t\t - [ " + (Math.round(obj.x1)/100) + ", " + (Math.round(obj.y1)/100)   +"]\n";
-        string += "\t\t\t - [ " + (Math.round(obj.x2)/100) + ", " + (Math.round(obj.y1)/100)   +"]\n";
-        string += "\t\t\t - [ " + (Math.round(obj.x2)/100) + ", " + (Math.round(obj.y2)/100)   +"]\n";
-        string += "\t\t\t - [ " + (Math.round(obj.x1)/100) + ", " + (Math.round(obj.y2)/100)   +"]\n";
-        string += "\t\t\t - [ " + (Math.round(obj.x1)/100) + ", " + (Math.round(obj.y1)/100)   +"]\n";
+        string += "\t\t\t- [ " + (Math.round(obj.x1)/100) + ", " + (Math.round(obj.y1)/100)   +"]\n";
+        string += "\t\t\t- [ " + (Math.round(obj.x2)/100) + ", " + (Math.round(obj.y1)/100)   +"]\n";
+        string += "\t\t\t- [ " + (Math.round(obj.x2)/100) + ", " + (Math.round(obj.y2)/100)   +"]\n";
+        string += "\t\t\t- [ " + (Math.round(obj.x1)/100) + ", " + (Math.round(obj.y2)/100)   +"]\n";
+        string += "\t\t\t- [ " + (Math.round(obj.x1)/100) + ", " + (Math.round(obj.y1)/100)   +"]\n";
     });
 
     string += "nodes: \n";
@@ -474,8 +474,8 @@ function objToYaml(obj) {
             var x = currentUnit == "m" ? Math.abs(probe.x - firstCoordinateOffsetX) : Math.abs(probe.x - firstCoordinateOffsetX)/3.2808;
             var y =  currentUnit == "m" ? Math.abs(probe.y - firstCoordinateOffsetY) : Math.abs(probe.y - firstCoordinateOffsetY)/3.2808;
             string += "\t- name: " + probe.name +"\n";
-            string += "\tpoint: [" + (Math.round(x)/100) + "," + (Math.round(y) / 100) + ", 0]\n";
-            string += "\tfloors: [\"first\"]\n";
+            string += "\t\tpoint: [" + (Math.round(x)/100) + "," + (Math.round(y) / 100) + ", 0]\n";
+            string += "\t\tfloors: [\"first\"]\n";
         });
     });
     return string;
