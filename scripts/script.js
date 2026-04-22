@@ -401,10 +401,10 @@ function exportToYaml() {
             // second coordinat is (room x minus firstCoordinateOffsetX) plus room width, (room y minus firstCoordinateOffsetY) plus room height
             //console.log(room.id, "x: " + (room.zone.x - firstCoordinateOffsetX) + ", y: " + (room.zone.y - firstCoordinateOffsetY));
             //console.log(room.id, "x: " + ((room.zone.x - firstCoordinateOffsetX) + room.zone.width) + ", y: " + ((room.zone.y - firstCoordinateOffsetY) + room.zone.height));
-            var y1 = currentUnit == "m" ? Math.abs(room.zone.y - firstCoordinateOffsetY) : Math.abs(room.zone.y - firstCoordinateOffsetY)/3.2808;
-            var x1 = currentUnit == "m" ? Math.abs(room.zone.x - firstCoordinateOffsetX) : Math.abs(room.zone.x - firstCoordinateOffsetX)/3.2808;
-            var y2 = currentUnit == "m" ? Math.abs((room.zone.y - firstCoordinateOffsetY) + room.zone.height) : Math.abs((room.zone.y - firstCoordinateOffsetY) + room.zone.height)/3.2808;
-            var x2 = currentUnit == "m" ? Math.abs((room.zone.x - firstCoordinateOffsetX) + room.zone.width) : Math.abs((room.zone.x - firstCoordinateOffsetX) + room.zone.width)/3.2808;
+            var y1 = currentUnit == "m" ? Math.abs(room.zone.y - firstCoordinateOffsetY) : Math.abs(room.zone.y - firstCoordinateOffsetY) * 3.28084;
+            var x1 = currentUnit == "m" ? Math.abs(room.zone.x - firstCoordinateOffsetX) : Math.abs(room.zone.x - firstCoordinateOffsetX) * 3.28084;
+            var y2 = currentUnit == "m" ? Math.abs((room.zone.y - firstCoordinateOffsetY) + room.zone.height) : Math.abs((room.zone.y - firstCoordinateOffsetY) + room.zone.height) * 3.28084;
+            var x2 = currentUnit == "m" ? Math.abs((room.zone.x - firstCoordinateOffsetX) + room.zone.width) : Math.abs((room.zone.x - firstCoordinateOffsetX) + room.zone.width) * 3.28084;
             var objRoom = {
                 name: room.name ? room.name : "Room" + room.id,
                 y1,
@@ -471,8 +471,8 @@ function objToYaml(obj) {
     string += "nodes: \n";
     obj.rooms.forEach(probesData => {
         probesData.probes.forEach(probe => {
-            var x = currentUnit == "m" ? Math.abs(probe.x - firstCoordinateOffsetX) : Math.abs(probe.x - firstCoordinateOffsetX)/3.2808;
-            var y =  currentUnit == "m" ? Math.abs(probe.y - firstCoordinateOffsetY) : Math.abs(probe.y - firstCoordinateOffsetY)/3.2808;
+            var x = currentUnit == "m" ? Math.abs(probe.x - firstCoordinateOffsetX) : Math.abs(probe.x - firstCoordinateOffsetX) * 3.28084;
+            var y =  currentUnit == "m" ? Math.abs(probe.y - firstCoordinateOffsetY) : Math.abs(probe.y - firstCoordinateOffsetY) * 3.28084;
             string += "\t- name: " + probe.name +"\n";
             string += "\t\tpoint: [" + (Math.round(x)/100) + "," + (Math.round(y) / 100) + ", 0]\n";
             string += "\t\tfloors: [\"first\"]\n";
